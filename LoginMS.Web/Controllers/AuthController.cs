@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Common.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LoginMS.Web.Controllers
@@ -10,6 +11,18 @@ namespace LoginMS.Web.Controllers
     {
         public AuthController()
         {
+        }
+        
+        [HttpGet]
+        public async Task<ActionResult<LoginData>> GetToken(string email, string password)
+        {
+            return Ok(new LoginData());
+        }
+        
+        [HttpPut]
+        public async Task<IActionResult> SignUp(string email, string password, string name, string surname, string phone)
+        {
+            return Ok();
         }
     }
 }
