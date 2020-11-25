@@ -4,4 +4,13 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Ensure.That" Version="9.2.0" />
+      <PackageReference Include="MongoDB.Driver" Version="2.11.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Common.Infrastructure.MongoDB\Common.Infrastructure.MongoDB.csproj" />
+    </ItemGroup>
+
 </Project>
