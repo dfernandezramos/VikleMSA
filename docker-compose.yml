@@ -1,18 +1,18 @@
 version: '3.4'
 
 services:
-  customerservice:
+  loginservice:
     image: loginsvc
     build:
       context: .
-      dockerfile: Customers.Web/Dockerfile
+      dockerfile: LoginMS.Web/Dockerfile
     ports:
     - 32001:80
 
-  orderservice:
+  vikleservice:
     image: vikleapisvc
     build:
       context: .
-      dockerfile: Orders.Web/Dockerfile
+      dockerfile: VikleAPIMS.Web/Dockerfile
     ports:
     - 32002:80
