@@ -22,7 +22,7 @@ namespace VikleAPIMS.Web
         public void ConfigureServices(IServiceCollection services)
         {
             ConfigureRepositories(services);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddControllers();
         }
 
         private void ConfigureRepositories(IServiceCollection services)
@@ -43,7 +43,16 @@ namespace VikleAPIMS.Web
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
