@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using VikleAPIMS.Data;
 
 namespace VikleAPIMS.Web
@@ -23,6 +24,20 @@ namespace VikleAPIMS.Web
         {
             ConfigureRepositories(services);
             services.AddControllers();
+            
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { 
+                    Title = "Vikle API", 
+                    Version = "v1",
+                    Description ="Vikle data API.",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "David Fernández Ramos",
+                        Email = "dfernandez@uoc.edu"
+                    }
+                });
+            });
         }
 
         private void ConfigureRepositories(IServiceCollection services)
@@ -43,6 +58,19 @@ namespace VikleAPIMS.Web
                 app.UseDeveloperExceptionPage();
             }
 
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Zomato API V1");
+
+                // To serve SwaggerUI at application's root page, set the RoutePrefix property to an empty string.
+                c.RoutePrefix = string.Empty;
+            });
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();
