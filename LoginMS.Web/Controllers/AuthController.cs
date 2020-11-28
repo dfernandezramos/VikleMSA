@@ -53,7 +53,7 @@ namespace LoginMS.Web.Controllers
             return Ok();
         }
 
-        JwtSecurityToken GenerateToken(string userName, string userRole)
+        string GenerateToken(string userName, string userRole)
         {
             var authClaims = new List<Claim>
             {
@@ -63,12 +63,13 @@ namespace LoginMS.Web.Controllers
             };
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
   
-            return new JwtSecurityToken(
+            var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
             );
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

@@ -36,26 +36,26 @@ namespace LoginMS.Web
             _log.Info("Populating Login database...");
             var clientId = Guid.NewGuid().ToString();
             var workerId = Guid.NewGuid().ToString();
-            
+
             await _repository.NewAuthData(new AuthData
             {
                 UserId = clientId,
                 Email = "client@email.com",
                 Password = "Client123",
-                Token = GenerateToken("client@email.com", UserRole.Client.ToString(), clientId).Id
+                Token = GenerateToken("client@email.com", UserRole.Client.ToString(), clientId)
             }, default);
             await _repository.NewAuthData(new AuthData
             {
                 UserId = workerId,
                 Email = "worker@email.com",
                 Password = "Worker123",
-                Token = GenerateToken("worker@email.com", UserRole.Client.ToString(), workerId).Id
+                Token = GenerateToken("worker@email.com", UserRole.Client.ToString(), workerId)
             }, default);
             
             _log.Info("Login database population success");
         }
         
-        JwtSecurityToken GenerateToken(string userName, string userRole, string id)
+        string GenerateToken(string userName, string userRole, string id)
         {
             var authClaims = new List<Claim>
             {
@@ -65,12 +65,13 @@ namespace LoginMS.Web
             };
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
   
-            return new JwtSecurityToken(
+            var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
             );
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
