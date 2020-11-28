@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Common.Contracts;
@@ -7,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace VikleAPIMS.Web.Controllers
 {
+    /// <summary>
+    /// This class contains the controller with the workshop endpoints.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class WorkshopController : ControllerBase
@@ -15,6 +16,11 @@ namespace VikleAPIMS.Web.Controllers
         {
         }
         
+        /// <summary>
+        /// This method gets the workshop current reparations for the given workshop identifier.
+        /// </summary>
+        /// <param name="workshopId">The workshop identifier</param>
+        /// <returns>The workshop current reparations</returns>
         [HttpGet]
         [Route ("reparations")]
         public async Task<ActionResult<IEnumerable<Reparation>>> GetWorkshopReparations(string workshopId)
@@ -22,9 +28,17 @@ namespace VikleAPIMS.Web.Controllers
             return Ok(new List<Reparation>());
         }
         
+        /// <summary>
+        /// This method posts the provided reparation information for the workshop reparation to the API.
+        /// </summary>
+        /// <param name="reparationId">The reparation identifier</param>
+        /// <param name="reparationDate">The reparation date</param>
+        /// <param name="plateNumber">The plate number</param>
+        /// <param name="status">The reparation status</param>
+        /// <param name="reparationType">The reparation type</param>
         [HttpPost]
         [Route ("reparations")]
-        public async Task<IActionResult> UpdateWorkshopReparation(string reparationDate, string plateNumber, string status, string reparationType)
+        public async Task<IActionResult> UpdateWorkshopReparation(string reparationId, string reparationDate, string plateNumber, string status, string reparationType)
         {
             return Ok();
         }

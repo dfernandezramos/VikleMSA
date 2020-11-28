@@ -1,7 +1,6 @@
 using Common.Infrastructure.MongoDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,6 +9,9 @@ using VikleAPIMS.Data;
 
 namespace VikleAPIMS.Web
 {
+    /// <summary>
+    /// This class contains the implementation of the startup initializations.
+    /// </summary>
     public class Startup
     {
         public Startup(IConfiguration configuration)

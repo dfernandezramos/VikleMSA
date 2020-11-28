@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace VikleAPIMS.Web
 {
+    /// <summary>
+    /// This class contains the main program initialization.
+    /// </summary>
     class Program
     {
         public static void Main(string[] args)

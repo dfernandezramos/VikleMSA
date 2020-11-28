@@ -4,6 +4,9 @@ using MongoDB.Driver;
 
 namespace Common.Infrastructure.MongoDB
 {
+    /// <summary>
+    /// This class contains the base class for the database repository classes.
+    /// </summary>
     public class BaseRepository
     {
         protected readonly IMongoDatabase MongoDatabase;
