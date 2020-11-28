@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Contracts;
+using Common.Domain;
 using LoginMS.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -18,11 +19,13 @@ namespace LoginMS.Web
     {
         private readonly ILoginRepository _repository;
         private readonly IConfiguration _configuration;
+        private ILog _log;
 
-        public DatabasePopulator(ILoginRepository repository, IConfiguration configuration)
+        public DatabasePopulator(ILoginRepository repository, IConfiguration configuration, ILog log)
         {
             _repository = repository;
             _configuration = configuration;
+            _log = log;
         }
 
         /// <summary>
@@ -30,6 +33,7 @@ namespace LoginMS.Web
         /// </summary>
         public async Task Seed()
         {
+            _log.Info("Populating Login database...");
             var clientId = Guid.NewGuid().ToString();
             var workerId = Guid.NewGuid().ToString();
             
@@ -47,6 +51,8 @@ namespace LoginMS.Web
                 Password = "Worker123",
                 Token = GenerateToken("worker@email.com", UserRole.Client.ToString(), workerId).Id
             }, default);
+            
+            _log.Info("Login database population success");
         }
         
         JwtSecurityToken GenerateToken(string userName, string userRole, string id)

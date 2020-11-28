@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Common.Domain;
 using Microsoft.Extensions.Configuration;
 using VikleAPIMS.Data;
 
@@ -11,10 +12,12 @@ namespace VikleAPIMS.Web
     {
         private readonly IVikleRepository _repository;
         private readonly IConfiguration _configuration;
+        private ILog _log;
 
-        public DatabasePopulator(IVikleRepository repository)
+        public DatabasePopulator(IVikleRepository repository, ILog log)
         {
             _repository = repository;
+            _log = log;
         }
 
         /// <summary>
@@ -22,7 +25,9 @@ namespace VikleAPIMS.Web
         /// </summary>
         public async Task Seed()
         {
+            _log.Info("Populating Login database...");
             
+            _log.Info("Login database population success");
         }
     }
 }

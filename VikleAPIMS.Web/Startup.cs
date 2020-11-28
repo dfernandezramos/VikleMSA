@@ -1,4 +1,5 @@
 using System.Text;
+using Common.Domain;
 using Common.Infrastructure.MongoDB;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -27,6 +28,9 @@ namespace VikleAPIMS.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var log = new Log();
+            services.AddSingleton<ILog>(log);
+            
             ConfigureRepositories(services);
             services.AddControllers();
             
