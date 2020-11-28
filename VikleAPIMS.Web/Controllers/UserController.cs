@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Common.Contracts;
@@ -92,23 +93,11 @@ namespace VikleAPIMS.Web.Controllers
         [HttpPost]
         [Route ("vehicles")]
         public async Task<IActionResult> UpdateUserVehicle(string oldPlateNumber, string newPlateNumber, string model,
-            string vehicleType, string year, string lastITV, string lastTBDS, string IdClient)
+            VehicleType vehicleType, int year, DateTime lastITV, DateTime lastTBDS, string IdClient)
         {
             return Ok();
         }
-        
-        /// <summary>
-        /// This method gets the current reparation for the provided vehicle identifier
-        /// </summary>
-        /// <param name="plateNumber">The vehicle plate number</param>
-        /// <returns>The current reparation of the vehicle</returns>
-        [HttpGet]
-        [Route ("reparations/current")]
-        public async Task<ActionResult<Reparation>> GetUserCurrentReparation(string plateNumber)
-        {
-            return Ok(new Reparation());
-        }
-        
+
         /// <summary>
         /// This method gets the dates of the provided user identifier
         /// </summary>
@@ -132,7 +121,7 @@ namespace VikleAPIMS.Web.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route ("dates")]
-        public async Task<IActionResult> UpdateUserDate(string reparationDate, string plateNumber, string reason, string idClient, string status)
+        public async Task<IActionResult> UpdateUserDate(DateTime reparationDate, string plateNumber, ReparationType reason, string idClient, ReparationStatus status)
         {
             return Ok(new List<Date>());
         }

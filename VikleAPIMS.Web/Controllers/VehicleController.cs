@@ -36,10 +36,22 @@ namespace VikleAPIMS.Web.Controllers
         /// <param name="plateNumber">The vehicle plate number.</param>
         /// <returns>The vehicle's owner</returns>
         [HttpGet]
-        [Route ("reparations")]
+        [Route ("owner")]
         public async Task<ActionResult<User>> GetVehicleOwner(string plateNumber)
         {
             return Ok(new User());
+        }
+        
+        /// <summary>
+        /// This method gets the current reparation for the provided vehicle identifier
+        /// </summary>
+        /// <param name="plateNumber">The vehicle plate number</param>
+        /// <returns>The current reparation of the vehicle</returns>
+        [HttpGet]
+        [Route ("reparations/current")]
+        public async Task<ActionResult<Reparation>> GetVehicleCurrentReparation(string plateNumber)
+        {
+            return Ok(new Reparation());
         }
     }
 }

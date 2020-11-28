@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Common.Contracts;
@@ -40,7 +41,7 @@ namespace VikleAPIMS.Web.Controllers
         /// <param name="reparationType">The reparation type</param>
         [HttpPost]
         [Route ("reparations")]
-        public async Task<IActionResult> UpdateWorkshopReparation(string reparationId, string reparationDate, string plateNumber, string status, string reparationType)
+        public async Task<IActionResult> UpdateWorkshopReparation(string reparationId, DateTime reparationDate, string plateNumber, ReparationStatus status, ReparationType reparationType)
         {
             return Ok();
         }
