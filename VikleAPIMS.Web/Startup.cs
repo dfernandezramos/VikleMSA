@@ -68,16 +68,6 @@ namespace VikleAPIMS.Web
                 });
         }
 
-        private void ConfigureRepositories(IServiceCollection services)
-        {
-            services.AddSingleton(new MongoDbSettings
-            {
-                ServerConnection = Configuration["ConnectionStrings:MongoDb:ServerConnection"],
-                Database = Configuration["ConnectionStrings:MongoDb:DatabaseName"]
-            });
-            services.AddTransient<IVikleRepository, VikleRepository>();
-        }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -110,6 +100,16 @@ namespace VikleAPIMS.Web
             {
                 endpoints.MapControllers();
             });
+        }
+        
+        void ConfigureRepositories(IServiceCollection services)
+        {
+            services.AddSingleton(new MongoDbSettings
+            {
+                ServerConnection = Configuration["ConnectionStrings:MongoDb:ServerConnection"],
+                Database = Configuration["ConnectionStrings:MongoDb:DatabaseName"]
+            });
+            services.AddTransient<IVikleRepository, VikleRepository>();
         }
     }
 }
