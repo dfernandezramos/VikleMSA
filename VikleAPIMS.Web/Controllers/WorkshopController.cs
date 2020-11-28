@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Common.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace VikleAPIMS.Web.Controllers
@@ -10,6 +11,7 @@ namespace VikleAPIMS.Web.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class WorkshopController : ControllerBase
     {
         public WorkshopController()

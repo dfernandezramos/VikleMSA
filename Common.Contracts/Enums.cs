@@ -1,6 +1,16 @@
 namespace Common.Contracts
 {
     /// <summary>
+    /// This enumerator contains the user different roles.
+    /// </summary>
+    public enum UserRole
+    {
+        Admin,
+        Client,
+        Worker
+    }
+    
+    /// <summary>
     /// This enumerator contains the vehicle different types.
     /// </summary>
     public enum VehicleType

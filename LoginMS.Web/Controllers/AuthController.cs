@@ -1,6 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Common.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace LoginMS.Web.Controllers
 {
@@ -11,8 +18,11 @@ namespace LoginMS.Web.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public AuthController()
+        private readonly IConfiguration _configuration;  
+        
+        public AuthController(IConfiguration configuration)
         {
+            _configuration = configuration;
         }
         
         /// <summary>
@@ -38,7 +48,27 @@ namespace LoginMS.Web.Controllers
         [HttpPut]
         public async Task<IActionResult> SignUp(string email, string password, string name, string surname, string phone)
         {
+            var token = GenerateToken(name, UserRole.Client.ToString());
+            
             return Ok();
+        }
+
+        JwtSecurityToken GenerateToken(string userName, string userRole)
+        {
+            var authClaims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, userName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role, userRole)
+            };
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+  
+            return new JwtSecurityToken(
+                issuer: _configuration["JWT:ValidIssuer"],
+                audience: _configuration["JWT:ValidAudience"],
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+            );
         }
     }
 }
