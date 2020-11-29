@@ -23,7 +23,7 @@ namespace LoginMS.Data
         /// <param name="email">The user email</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns>The authorization data</returns>
-        public async Task<AuthData> GetAuthDataByEmail(string email, CancellationToken cancellationToken)
+        public async Task<AuthData> GetAuthDataByEmail(string email, CancellationToken cancellationToken = default)
         {
             return await Task.FromResult(AuthData.Find(c => c.Email == email, new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken));
         }
@@ -33,7 +33,7 @@ namespace LoginMS.Data
         /// </summary>
         /// <param name="authData">The user authorization data</param>
         /// <param name="cancellationToken">The cancellation token</param>
-        public async Task NewAuthData(AuthData authData, CancellationToken cancellationToken)
+        public async Task NewAuthData(AuthData authData, CancellationToken cancellationToken = default)
         {
             await AuthData.InsertOneAsync(authData, new InsertOneOptions { BypassDocumentValidation = false }, cancellationToken);
         }
@@ -45,7 +45,7 @@ namespace LoginMS.Data
         /// <param name="email">The user email</param>
         /// <param name="password">The user password</param>
         /// <param name="cancellationToken">The cancellation token</param>
-        public async Task UpdateAuthData(string userId, string email, string password, CancellationToken cancellationToken)
+        public async Task UpdateAuthData(string userId, string email, string password, CancellationToken cancellationToken = default)
         {
             var authData = await GetAuthDataByEmail(userId, cancellationToken);
             if (authData == default(AuthData))
