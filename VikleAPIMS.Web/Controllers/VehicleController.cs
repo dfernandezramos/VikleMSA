@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Common.Contracts;
+using Common.Domain;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using VikleAPIMS.Data;
 
 namespace VikleAPIMS.Web.Controllers
 {
@@ -14,8 +17,13 @@ namespace VikleAPIMS.Web.Controllers
     [Authorize]
     public class VehicleController : ControllerBase
     {
-        public VehicleController()
+        private readonly ILog _log;
+        private readonly IVikleRepository _repository;
+        
+        public VehicleController(ILog log, IVikleRepository repository)
         {
+            _log = log;
+            _repository = repository;
         }
         
         /// <summary>
@@ -25,9 +33,15 @@ namespace VikleAPIMS.Web.Controllers
         /// <returns>A list with the vehicle reparations</returns>
         [HttpGet]
         [Route ("reparations")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(List<Reparation>),StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<Reparation>>> GetVehicleReparations(string plateNumber)
         {
-            return Ok(new List<Reparation>());
+            _log.Info("Calling get vehicle reparations endpoint...");
+
+            var reparations = await _repository.GetVehicleReparations(plateNumber);
+            return Ok(reparations);
         }
         
         /// <summary>
@@ -37,9 +51,15 @@ namespace VikleAPIMS.Web.Controllers
         /// <returns>The vehicle's owner</returns>
         [HttpGet]
         [Route ("owner")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(List<Reparation>),StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<User>> GetVehicleOwner(string plateNumber)
         {
-            return Ok(new User());
+            _log.Info("Calling get vehicle owner endpoint...");
+
+            var owner = await _repository.GetVehicleOwner(plateNumber);
+            return Ok(owner);
         }
         
         /// <summary>
@@ -49,9 +69,15 @@ namespace VikleAPIMS.Web.Controllers
         /// <returns>The current reparation of the vehicle</returns>
         [HttpGet]
         [Route ("reparations/current")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(List<Reparation>),StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Reparation>> GetVehicleCurrentReparation(string plateNumber)
         {
-            return Ok(new Reparation());
+            _log.Info("Calling get vehicle current reparation endpoint...");
+            
+            var reparation = await _repository.GetVehicleCurrentReparation(plateNumber);
+            return Ok(reparation);
         }
     }
 }

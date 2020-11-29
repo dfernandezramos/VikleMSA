@@ -14,6 +14,8 @@ namespace VikleAPIMS.Data
     public class VikleRepository : BaseRepository, IVikleRepository
     {
         IMongoCollection<Reparation> Reparations => MongoDatabase.GetCollection<Reparation>("Reparations");
+        IMongoCollection<Vehicle> Vehicles => MongoDatabase.GetCollection<Vehicle>("Vehicles");
+        IMongoCollection<User> Users => MongoDatabase.GetCollection<User>("Users");
 
         protected VikleRepository(MongoDbSettings settings) : base(settings)
         {
@@ -66,6 +68,66 @@ namespace VikleAPIMS.Data
         public async Task<List<Reparation>> GetReparationsByWorkshopId(string workshopId, CancellationToken cancellationToken = default)
         {
             return await Task.FromResult(await Reparations.Find(c => c.WorkshopId == workshopId, new FindOptions { AllowPartialResults = false }).ToListAsync(cancellationToken));
+        }
+
+        /// <summary>
+        /// This method gets the current reparation for the given vehicle plate number.
+        /// </summary>
+        /// <param name="plateNumber">The vehicle plate number</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The vehicle current reparation</returns>
+        public async Task<Reparation> GetVehicleCurrentReparation(string plateNumber,
+            CancellationToken cancellationToken = default)
+        {
+            return await Task.FromResult(Reparations.Find(c => c.PlateNumber == plateNumber &&
+                c.Status != ReparationStatus.Repaired || c.Status != ReparationStatus.Rejected,
+                new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken));
+        }
+
+        /// <summary>
+        /// This method gets the list of reparations for the given vehicle plate number.
+        /// </summary>
+        /// <param name="plateNumber">The vehicle plate number</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The vehicle reparations</returns>
+        public async Task<List<Reparation>> GetVehicleReparations(string plateNumber,
+            CancellationToken cancellationToken = default)
+        {
+            return await Task.FromResult(await Reparations.Find(c => c.PlateNumber == plateNumber, new FindOptions { AllowPartialResults = false }).ToListAsync(cancellationToken));
+        }
+
+        /// <summary>
+        /// This method gets the owner for the given vehicle plate number.
+        /// </summary>
+        /// <param name="plateNumber">The vehicle plate number</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The vehicle owner</returns>
+        public async Task<User> GetVehicleOwner(string plateNumber, CancellationToken cancellationToken = default)
+        {
+            var vehicle = await GetVehicleById(plateNumber, cancellationToken);
+            return await GetUserById(vehicle.IdClient, cancellationToken);
+        }
+        
+        /// <summary>
+        /// This method gets the vehicle data for the given vehicle plate number.
+        /// </summary>
+        /// <param name="plateNumber">The vehicle plate number</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The vehicle data</returns>
+        public async Task<Vehicle> GetVehicleById(string plateNumber, CancellationToken cancellationToken = default)
+        {
+            return await Task.FromResult(Vehicles.Find(c => c.PlateNumber == plateNumber, new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken));
+        }
+        
+        /// <summary>
+        /// This method gets the user data for the given user identifier.
+        /// </summary>
+        /// <param name="userId">The user identifier</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The user data</returns>
+        public async Task<User> GetUserById(string userId, CancellationToken cancellationToken = default)
+        {
+            return await Task.FromResult(Users.Find(c => c.Id == userId, new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken)); 
         }
     }
 }
