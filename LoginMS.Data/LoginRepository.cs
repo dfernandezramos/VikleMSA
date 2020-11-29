@@ -56,5 +56,20 @@ namespace LoginMS.Data
             authData.Password = password;
             await AuthData.ReplaceOneAsync(c => c.UserId == userId, authData, new ReplaceOptions { IsUpsert = false }, cancellationToken);
         }
+        
+        /// <summary>
+        /// This method resets the user password for the given user email.
+        /// </summary>
+        /// <param name="email">The user email</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        public async Task ResetPassword(string email, CancellationToken cancellationToken = default)
+        {
+            var result = await GetAuthDataByEmail(email, cancellationToken);
+            
+            if (result != null)
+            {
+                await UpdateAuthData(result.UserId, result.Email, "resetPassword", cancellationToken);
+            }
+        }
     }
 }

@@ -61,6 +61,21 @@ namespace LoginMS.Web.Controllers
         }
         
         /// <summary>
+        /// This method resets the password for the provided user email
+        /// </summary>
+        /// <param name="email">The user email</param>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ResetPassword(string email)
+        {
+            _log.Info("Calling reset password endpoint...");
+
+            await _repository.ResetPassword(email);
+            return Ok();
+        }
+        
+        /// <summary>
         /// This method puts the provided user signup data in the login database.
         /// </summary>
         /// <param name="email">The user email</param>

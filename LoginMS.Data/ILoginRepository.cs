@@ -33,5 +33,12 @@ namespace LoginMS.Data
         /// <param name="password">The user password</param>
         /// <param name="cancellationToken">The cancellation token</param>
         Task UpdateAuthData(string userId, string email, string password, CancellationToken cancellationToken = default);
+        
+        /// <summary>
+        /// This method resets the user password for the given user email.
+        /// </summary>
+        /// <param name="email">The user email</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        Task ResetPassword(string email, CancellationToken cancellationToken = default);
     }
 }
