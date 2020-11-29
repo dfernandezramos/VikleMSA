@@ -10,6 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Common.Contracts\Common.Contracts.csproj" />
       <ProjectReference Include="..\Common.Infrastructure.MongoDB\Common.Infrastructure.MongoDB.csproj" />
     </ItemGroup>
 

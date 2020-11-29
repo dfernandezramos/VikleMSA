@@ -14,6 +14,11 @@ namespace Common.Contracts
         public string Id { get; set; }
         
         /// <summary>
+        /// Gets or sets the identifier of the workshop.
+        /// </summary>
+        public string WorkshopId { get; set; }
+        
+        /// <summary>
         /// Gets or sets the plate number of the repaired vehicle.
         /// </summary>
         public string PlateNumber { get; set; }
