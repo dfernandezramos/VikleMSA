@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Common.Contracts;
+using Common.Domain;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using VikleAPIMS.Data;
 
 namespace VikleAPIMS.Web.Controllers
 {
@@ -12,11 +15,15 @@ namespace VikleAPIMS.Web.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class UserController : ControllerBase
     {
-        public UserController()
+        private readonly ILog _log;
+        private readonly IVikleRepository _repository;
+        
+        public UserController(ILog log, IVikleRepository repository)
         {
+            _log = log;
+            _repository = repository;
         }
         
         /// <summary>
@@ -25,9 +32,24 @@ namespace VikleAPIMS.Web.Controllers
         /// <param name="userId">The user identifier.</param>
         /// <returns>The user.</returns>
         [HttpGet]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(User),StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<User>> GetUserFromId(string userId)
         {
-            return Ok(new User());
+            _log.Info("Calling get user endpoint...");
+
+            var user = _repository.GetUserById(userId);
+
+            if (user == null)
+            {
+                _log.Error("No user with the provided identifier exists.");
+                return Forbid();
+            }
+            
+            return Ok(user);
         }
         
         /// <summary>
@@ -40,18 +62,25 @@ namespace VikleAPIMS.Web.Controllers
         /// <param name="surname">The user surname</param>
         /// <param name="phone">The user phone</param>
         [HttpPost]
-        public async Task<IActionResult> UpdateUserData(string userId, string email, string password, string name, string surname, string phone)
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateUserData(User user)
         {
-            return Ok();
-        }
-        
-        /// <summary>
-        /// This method updates the user password for the user with the provided email
-        /// </summary>
-        /// <param name="email">The user email</param>
-        [HttpPost]
-        public async Task<IActionResult> RecoverPassword(string email)
-        {
+            _log.Info("Calling update user endpoint...");
+
+            try
+            {
+                await _repository.UpdateUser(user);
+            }
+            catch (ArgumentException)
+            {
+                _log.Error("No user with the provider id exists.");
+                return Forbid();
+            }
+
             return Ok();
         }
         
@@ -61,10 +90,17 @@ namespace VikleAPIMS.Web.Controllers
         /// <param name="userId">The user identifier</param>
         /// <returns>A list with the user vehicles</returns>
         [HttpGet]
+        [Authorize]
         [Route ("vehicles")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(IEnumerable<Vehicle>),StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<Vehicle>>> GetUserVehicles(string userId)
         {
-            return Ok(new List<Vehicle>());
+            _log.Info("Calling get user vehicles endpoint...");
+
+            var vehicles = _repository.GetUserVehicles(userId);
+            return Ok(vehicles);
         }
         
         /// <summary>
@@ -73,9 +109,16 @@ namespace VikleAPIMS.Web.Controllers
         /// <param name="userId">The user identifier</param>
         /// <param name="plateNumber">The vehicle plate number</param>
         [HttpDelete]
+        [Authorize]
         [Route ("vehicles")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteUserVehicle(string userId, string plateNumber)
         {
+            _log.Info("Calling delete user vehicle endpoint...");
+
+            await _repository.DeleteUserVehicle(userId, plateNumber);
             return Ok();
         }
         
@@ -83,18 +126,18 @@ namespace VikleAPIMS.Web.Controllers
         /// This method updates the provided vehicle data for the provided vehicle identifier
         /// </summary>
         /// <param name="oldPlateNumber">The current saved vehicle plate number in the API</param>
-        /// <param name="newPlateNumber">The new vehicle plate number to be saved in the API</param>
-        /// <param name="model">The vehicle number</param>
-        /// <param name="vehicleType">The vehicle type</param>
-        /// <param name="year">The vehicle year</param>
-        /// <param name="lastITV">The vehicle last ITV date</param>
-        /// <param name="lastTBDS">The vehicle last TBDS date</param>
-        /// <param name="IdClient">The client identifier</param>
+        /// <param name="vehicle">The new vehicle data to be saved in the API</param>
         [HttpPost]
+        [Authorize]
         [Route ("vehicles")]
-        public async Task<IActionResult> UpdateUserVehicle(string oldPlateNumber, string newPlateNumber, string model,
-            VehicleType vehicleType, int year, DateTime lastITV, DateTime lastTBDS, string IdClient)
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateUserVehicle(string oldPlateNumber, Vehicle vehicle)
         {
+            _log.Info("Calling update user vehicle endpoint...");
+
+            await _repository.UpdateVehicle(oldPlateNumber, vehicle);
             return Ok();
         }
 
@@ -104,26 +147,56 @@ namespace VikleAPIMS.Web.Controllers
         /// <param name="userId">The user identifier</param>
         /// <returns>A list with the user dates</returns>
         [HttpGet]
+        [Authorize]
         [Route ("dates")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(IEnumerable<Date>),StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<Date>>> GetUserDates(string userId)
         {
-            return Ok(new List<Date>());
+            _log.Info("Calling get user dates endpoint...");
+
+            var dates = await _repository.GetUserDates(userId);
+            return Ok(dates);
         }
         
         /// <summary>
         /// This method saves the provided date data in the API
         /// </summary>
-        /// <param name="reparationDate">The reparation date</param>
-        /// <param name="plateNumber">The vehicle plate number</param>
-        /// <param name="reason">The reparation reason</param>
-        /// <param name="idClient">The client identifier</param>
-        /// <param name="status">The reparation status</param>
-        /// <returns></returns>
+        /// <param name="date">The date information</param>
         [HttpPost]
+        [Authorize]
         [Route ("dates")]
-        public async Task<IActionResult> UpdateUserDate(DateTime reparationDate, string plateNumber, ReparationType reason, string idClient, ReparationStatus status)
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> NewUserDate(Date date)
         {
-            return Ok(new List<Date>());
+            _log.Info("Calling new user date endpoint...");
+
+            try
+            {
+                await _repository.NewDate(date);
+            }
+            catch (ArgumentException)
+            {
+                _log.Error("Date update user date endpoint...");
+                return BadRequest();
+            }
+
+            var reparation = new Reparation
+            {
+                Id = Guid.NewGuid().ToString(),
+                WorkshopId = date.WorkshopId,
+                PlateNumber = date.PlateNumber,
+                Date = DateTime.UtcNow,
+                Type = date.Reason,
+                Status = date.Status,
+                Details = new List<string>()
+            };
+            await _repository.NewReparation(reparation);
+            return Ok();
         }
     }
 }

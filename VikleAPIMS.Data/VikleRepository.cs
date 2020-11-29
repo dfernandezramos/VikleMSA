@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Common.Contracts;
@@ -16,6 +17,7 @@ namespace VikleAPIMS.Data
         IMongoCollection<Reparation> Reparations => MongoDatabase.GetCollection<Reparation>("Reparations");
         IMongoCollection<Vehicle> Vehicles => MongoDatabase.GetCollection<Vehicle>("Vehicles");
         IMongoCollection<User> Users => MongoDatabase.GetCollection<User>("Users");
+        IMongoCollection<Date> Dates => MongoDatabase.GetCollection<Date>("Dates");
 
         protected VikleRepository(MongoDbSettings settings) : base(settings)
         {
@@ -128,6 +130,133 @@ namespace VikleAPIMS.Data
         public async Task<User> GetUserById(string userId, CancellationToken cancellationToken = default)
         {
             return await Task.FromResult(Users.Find(c => c.Id == userId, new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken)); 
+        }
+        
+        /// <summary>
+        /// This method updates the provided user data in the database.
+        /// </summary>
+        /// <param name="user">The user data</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        public async Task UpdateUser(User user, CancellationToken cancellationToken = default)
+        {
+            var result = await GetUserById(user.Id, cancellationToken);
+            
+            if (result == null)
+            {
+                throw new ArgumentException("No user with the provided id was found");
+            }
+            
+            await Users.ReplaceOneAsync(c => c.Id == user.Id, user, new ReplaceOptions { IsUpsert = false }, cancellationToken);
+        }
+
+        /// <summary>
+        /// This method gets the user data for the given user email.
+        /// </summary>
+        /// <param name="email">The user email</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The user data</returns>
+        public async Task<User> GetUserByEmail(string email, CancellationToken cancellationToken = default)
+        {
+            return await Task.FromResult(Users.Find(c => c.Email == email, new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken)); 
+        }
+
+        /// <summary>
+        /// This method gets the user vehicles for the provided user identifier.
+        /// </summary>
+        /// <param name="userId">The user identifier</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The user vehicles</returns>
+        public async Task<List<Vehicle>> GetUserVehicles(string userId, CancellationToken cancellationToken = default)
+        {
+            return await Task.FromResult(await Vehicles.Find(c => c.IdClient == userId || c.IdDrivers.Contains(userId), new FindOptions { AllowPartialResults = false }).ToListAsync(cancellationToken));
+        }
+        
+        /// <summary>
+        /// This method deletes the vehicle with the provided plate number for the provided user identifier.
+        /// </summary>
+        /// <param name="userId">The user identifier</param>
+        /// <param name="plateNumber">The plate number</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        public async Task DeleteUserVehicle(string userId, string plateNumber, CancellationToken cancellationToken = default)
+        {
+            var vehicle = await GetVehicleById(plateNumber, cancellationToken);
+
+            if (vehicle.IdDrivers.Contains(userId))
+            {
+                vehicle.IdDrivers.Remove(userId);
+                await UpdateVehicle(vehicle.PlateNumber, vehicle, cancellationToken);
+            }
+            else
+            {
+                if (vehicle.IdDrivers.Any())
+                {
+                    var id = vehicle.IdDrivers.First();
+                    vehicle.IdClient = id;
+                    vehicle.IdDrivers.Remove(userId);
+                    await UpdateVehicle(vehicle.PlateNumber, vehicle, cancellationToken);
+                }
+                else
+                {
+                    await Vehicles.DeleteOneAsync(c => c.PlateNumber == plateNumber, cancellationToken);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// This method updates the provided vehicle data in the database.
+        /// </summary>
+        /// <param name="plateNumber">The vehicle plate number</param>
+        /// <param name="vehicle">The vehicle data</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        public async Task UpdateVehicle(string plateNumber, Vehicle vehicle, CancellationToken cancellationToken = default)
+        {
+            var result = await GetVehicleById(plateNumber, cancellationToken);
+            
+            if (result == null)
+            {
+                throw new ArgumentException("No vehicle with the provided plate number was found");
+            }
+            
+            await Vehicles.ReplaceOneAsync(c => c.PlateNumber == vehicle.PlateNumber, vehicle, new ReplaceOptions { IsUpsert = false }, cancellationToken);
+        }
+        
+        /// <summary>
+        /// This method gets the provided user dates
+        /// </summary>
+        /// <param name="userId">The user identifier</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The user dates</returns>
+        public async Task<List<Date>> GetUserDates(string userId, CancellationToken cancellationToken = default)
+        {
+            return await Task.FromResult(await Dates.Find(c => c.IdClient == userId, new FindOptions { AllowPartialResults = false }).ToListAsync(cancellationToken));
+        }
+
+        /// <summary>
+        /// This method inserts the provided date information in the databse
+        /// </summary>
+        /// <param name="date">The date information</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        public async Task NewDate(Date date, CancellationToken cancellationToken = default)
+        {
+            var result = await GetDateById(date.PlateNumber, cancellationToken);
+            
+            if (result != null)
+            {
+                throw new ArgumentException("The provided vehicle already has a date");
+            }
+            
+            await Dates.InsertOneAsync(date, new InsertOneOptions { BypassDocumentValidation = false }, cancellationToken);
+        }
+        
+        /// <summary>
+        /// This method gets the date data with provided plate number.
+        /// </summary>
+        /// <param name="plateNumber">The vehicle plate number</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The date data</returns>
+        public async Task<Date> GetDateById(string plateNumber, CancellationToken cancellationToken = default)
+        {
+            return await Task.FromResult(Dates.Find(c => c.PlateNumber == plateNumber, new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken));
         }
     }
 }

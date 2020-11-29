@@ -79,5 +79,67 @@ namespace VikleAPIMS.Data
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns>The user data</returns>
         Task<User> GetUserById(string userId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// This method updates the provided user data in the database.
+        /// </summary>
+        /// <param name="user">The user data</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        Task UpdateUser(User user, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// This method gets the user data for the given user email.
+        /// </summary>
+        /// <param name="email">The user email</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The user data</returns>
+        Task<User> GetUserByEmail(string email, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// This method gets the user vehicles for the provided user identifier.
+        /// </summary>
+        /// <param name="userId">The user identifier</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The user vehicles</returns>
+        Task<List<Vehicle>> GetUserVehicles(string userId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// This method deletes the vehicle with the provided plate number for the provided user identifier.
+        /// </summary>
+        /// <param name="userId">The user identifier</param>
+        /// <param name="plateNumber">The plate number</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        Task DeleteUserVehicle(string userId, string plateNumber, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// This method updates the provided vehicle data in the database.
+        /// </summary>
+        /// <param name="plateNumber">The vehicle plate number</param>
+        /// <param name="vehicle">The vehicle data</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        Task UpdateVehicle(string plateNumber, Vehicle vehicle, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// This method gets the provided user dates
+        /// </summary>
+        /// <param name="userId">The user identifier</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The user dates</returns>
+        Task<List<Date>> GetUserDates(string userId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// This method inserts the provided date information in the databse
+        /// </summary>
+        /// <param name="date">The date information</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        Task NewDate(Date date, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// This method gets the date data with provided plate number.
+        /// </summary>
+        /// <param name="plateNumber">The vehicle plate number</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The date data</returns>
+        Task<Date> GetDateById(string plateNumber, CancellationToken cancellationToken = default);
     }
 }

@@ -13,6 +13,11 @@ namespace Common.Contracts
         public string Id { get; set; }
         
         /// <summary>
+        /// Gets or sets the workshop identifier of the date.
+        /// </summary>
+        public string WorkshopId { get; set; }
+        
+        /// <summary>
         /// Gets or sets the reparation datetime of the date.
         /// </summary>
         public DateTime ReparationDate { get; set; }
