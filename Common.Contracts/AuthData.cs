@@ -1,3 +1,5 @@
+using System;
+
 namespace Common.Contracts
 {
     /// <summary>
@@ -6,7 +8,12 @@ namespace Common.Contracts
     public class AuthData
     {
         /// <summary>
-        /// Gets or sets the user Id.
+        /// Gets or sets the AuthData identifier.
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user UserId.
         /// </summary>
         public string UserId { get; set; }
         

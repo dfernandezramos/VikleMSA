@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: LoginMS.Web/Dockerfile
     ports:
-    - 32001:80
+    - 32001:32001
 
   vikleservice:
     image: vikleapisvc
@@ -15,4 +15,12 @@ services:
       context: .
       dockerfile: VikleAPIMS.Web/Dockerfile
     ports:
-    - 32002:80
+    - 32002:32002
+      
+  gatewayservice:
+    image: gatewaysvc
+    build:
+      context: .
+      dockerfile: GatewayMS/Dockerfile
+    ports:
+    - 32003:80

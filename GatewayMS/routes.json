@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "endpoint": "/auth",
+      "destination": {
+        "path": "http://loginservice:80/api/auth"
+      }
+    },
+    {
+      "endpoint": "/user",
+      "destination": {
+        "path": "http://vikleservice:80/api/user"
+      }
+    },
+    {
+      "endpoint": "/user/vehicles",
+      "destination": {
+        "path": "http://vikleservice:80/api/user/vehicles"
+      }
+    },
+    {
+      "endpoint": "/dates",
+      "destination": {
+        "path": "http://vikleservice:80/api/dates"
+      }
+    },
+    {
+      "endpoint": "/vehicle/reparations",
+      "destination": {
+        "path": "http://vikleservice:80/api/vehicle/reparations"
+      }
+    },
+    {
+      "endpoint": "/vehicle/reparations/current",
+      "destination": {
+        "path": "http://vikleservice:80/api/vehicle/reparations/current"
+      }
+    },
+    {
+      "endpoint": "/vehicle/owner",
+      "destination": {
+        "path": "http://vikleservice:80/api/vehicle/owner"
+      }
+    },
+    {
+      "endpoint": "/workshop/reparations",
+      "destination": {
+        "path": "http://vikleservice:80/api/workshop/reparations"
+      }
+    }
+  ]
+}
