@@ -53,7 +53,7 @@ namespace VikleAPIMS.Web.Controllers
         [Route ("reparations")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(List<Reparation>),StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateWorkshopReparation(Reparation reparation)
         {

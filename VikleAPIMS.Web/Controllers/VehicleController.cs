@@ -52,7 +52,7 @@ namespace VikleAPIMS.Web.Controllers
         [HttpGet]
         [Route ("owner")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(List<Reparation>),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(User),StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<User>> GetVehicleOwner(string plateNumber)
         {
@@ -70,7 +70,7 @@ namespace VikleAPIMS.Web.Controllers
         [HttpGet]
         [Route ("reparations/current")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(List<Reparation>),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Reparation),StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Reparation>> GetVehicleCurrentReparation(string plateNumber)
         {
