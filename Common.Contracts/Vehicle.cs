@@ -9,6 +9,11 @@ namespace Common.Contracts
     public class Vehicle
     {
         /// <summary>
+        /// Gets or sets the identifier of the vehicle in the database.
+        /// </summary>
+        public Guid Id { get; set; }
+        
+        /// <summary>
         /// Gets or sets the plate number of the vehicle.
         /// </summary>
         public string PlateNumber { get; set; }

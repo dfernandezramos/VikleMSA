@@ -70,10 +70,12 @@ namespace VikleAPIMS.Web
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))  
                     };  
                 });
+            
+            services.AddTransient<DatabasePopulator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DatabasePopulator dbPopulator)
         {
             if (env.IsDevelopment())
             {
@@ -104,6 +106,8 @@ namespace VikleAPIMS.Web
             {
                 endpoints.MapControllers();
             });
+            
+            dbPopulator.Seed().Wait();
         }
         
         void ConfigureRepositories(IServiceCollection services)

@@ -18,8 +18,9 @@ namespace VikleAPIMS.Data
         IMongoCollection<Vehicle> Vehicles => MongoDatabase.GetCollection<Vehicle>("Vehicles");
         IMongoCollection<User> Users => MongoDatabase.GetCollection<User>("Users");
         IMongoCollection<Date> Dates => MongoDatabase.GetCollection<Date>("Dates");
+        IMongoCollection<Workshop> Workshops => MongoDatabase.GetCollection<Workshop>("Workshops");
 
-        protected VikleRepository(MongoDbSettings settings) : base(settings)
+        public VikleRepository(MongoDbSettings settings) : base(settings)
         {
         }
         
@@ -148,6 +149,16 @@ namespace VikleAPIMS.Data
             
             await Users.ReplaceOneAsync(c => c.Id == user.Id, user, new ReplaceOptions { IsUpsert = false }, cancellationToken);
         }
+        
+        /// <summary>
+        /// This method inserts a new user in the database.
+        /// </summary>
+        /// <param name="user">The user data</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        public async Task NewUser(User user, CancellationToken cancellationToken = default)
+        {
+            await Users.InsertOneAsync(user, new InsertOneOptions { BypassDocumentValidation = false }, cancellationToken);
+        }
 
         /// <summary>
         /// This method gets the user data for the given user email.
@@ -214,10 +225,12 @@ namespace VikleAPIMS.Data
             
             if (result == null)
             {
-                throw new ArgumentException("No vehicle with the provided plate number was found");
+                await Vehicles.InsertOneAsync(vehicle, new InsertOneOptions { BypassDocumentValidation = false }, cancellationToken);
             }
-            
-            await Vehicles.ReplaceOneAsync(c => c.PlateNumber == vehicle.PlateNumber, vehicle, new ReplaceOptions { IsUpsert = false }, cancellationToken);
+            else
+            {
+                await Vehicles.ReplaceOneAsync(c => c.PlateNumber == vehicle.PlateNumber, vehicle, new ReplaceOptions { IsUpsert = false }, cancellationToken);
+            }
         }
         
         /// <summary>
@@ -257,6 +270,33 @@ namespace VikleAPIMS.Data
         public async Task<Date> GetDateById(string plateNumber, CancellationToken cancellationToken = default)
         {
             return await Task.FromResult(Dates.Find(c => c.PlateNumber == plateNumber, new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken));
+        }
+
+        /// <summary>
+        /// This method inserts a new workshop in the database.
+        /// </summary>
+        /// <param name="workshopId">The workshop identifier</param>
+        /// <param name="name">The workshop name</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        public async Task NewWorkshop(string workshopId, string name, CancellationToken cancellationToken = default)
+        {
+            var workshop = new Workshop
+            {
+                Id = workshopId,
+                Name = name
+            };
+            await Workshops.InsertOneAsync(workshop, new InsertOneOptions { BypassDocumentValidation = false }, cancellationToken);
+        }
+
+        /// <summary>
+        /// This method gets the workshop data for the given identifier.
+        /// </summary>
+        /// <param name="workshopId">The workshop identifier</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The workshop data</returns>
+        public async Task<Workshop> GetWorkshopById(string workshopId, CancellationToken cancellationToken = default)
+        {
+            return await Task.FromResult(Workshops.Find(c => c.Id == workshopId, new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken));
         }
     }
 }

@@ -141,5 +141,28 @@ namespace VikleAPIMS.Data
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns>The date data</returns>
         Task<Date> GetDateById(string plateNumber, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// This method inserts a new workshop in the database.
+        /// </summary>
+        /// <param name="workshopId">The workshop identifier</param>
+        /// <param name="name">The workshop name</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        Task NewWorkshop(string workshopId, string name, CancellationToken cancellationToken = default);
+        
+        /// <summary>
+        /// This method gets the workshop data for the given identifier.
+        /// </summary>
+        /// <param name="workshopId">The workshop identifier</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The workshop data</returns>
+        Task<Workshop> GetWorkshopById(string workshopId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// This method inserts a new user in the database.
+        /// </summary>
+        /// <param name="user">The user data</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        Task NewUser(User user, CancellationToken cancellationToken = default);
     }
 }
