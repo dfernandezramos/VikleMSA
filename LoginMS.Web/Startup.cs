@@ -2,6 +2,8 @@ using System.Text;
 using Common.Domain;
 using Common.Infrastructure.MongoDB;
 using LoginMS.Data;
+using MessageBroker.Infrastructure;
+using MessageBroker.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,6 +34,7 @@ namespace LoginMS.Web
             services.AddSingleton<ILog>(log);
             
             ConfigureRepositories(services);
+            ConfigureMessageBroker (services);
             services.AddControllers();
             
             services.AddSwaggerGen(c =>
@@ -118,6 +121,12 @@ namespace LoginMS.Web
                 Database = Configuration["ConnectionStrings:MongoDb:DatabaseName"]
             });
             services.AddTransient<ILoginRepository, LoginRepository>();
+        }
+        
+        void ConfigureMessageBroker (IServiceCollection services)
+        {
+            services.Configure<EventProducerConfiguration> (Configuration.GetSection ("MessageBrokerProducer"));
+            services.AddTransient<IProducer, Producer> ();
         }
     }
 }

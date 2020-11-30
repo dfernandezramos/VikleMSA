@@ -1,6 +1,8 @@
 using System.Text;
+using Common.Contracts.Events;
 using Common.Domain;
 using Common.Infrastructure.MongoDB;
+using MessageBroker.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using VikleAPIMS.Data;
+using VikleAPIMS.Web.Handlers;
 
 namespace VikleAPIMS.Web
 {
@@ -32,6 +35,8 @@ namespace VikleAPIMS.Web
             services.AddSingleton<ILog>(log);
             
             ConfigureRepositories(services);
+            ConfigureMessageBroker (services);
+            ConfigureEventHandlers (services);
             services.AddControllers();
             
             services.AddSwaggerGen(c =>
@@ -118,6 +123,20 @@ namespace VikleAPIMS.Web
                 Database = Configuration["ConnectionStrings:MongoDb:DatabaseName"]
             });
             services.AddTransient<IVikleRepository, VikleRepository>();
+        }
+        
+        void ConfigureMessageBroker (IServiceCollection services)
+        {
+            services.Configure<EventConsumerConfiguration> (Configuration.GetSection ("MessageBrokerConsumer"));
+            services.PostConfigure<EventConsumerConfiguration> (options => {
+                options.RegisterConsumer<UserRegisteredEvent, RegisteredUserHandler> ();
+            });
+            services.AddSingleton<IHostedService, Consumer> ();
+        }
+
+        void ConfigureEventHandlers (IServiceCollection services)
+        {
+            services.AddTransient<RegisteredUserHandler> ();
         }
     }
 }

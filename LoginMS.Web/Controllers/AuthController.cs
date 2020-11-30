@@ -8,8 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using Common.Contracts.Events;
 using Common.Domain;
 using LoginMS.Data;
+using MessageBroker.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 
 namespace LoginMS.Web.Controllers
@@ -24,12 +26,14 @@ namespace LoginMS.Web.Controllers
         private readonly IConfiguration _configuration;
         private readonly ILoginRepository _repository;
         private readonly ILog _log;
+        private readonly IProducer _mbProducer;
 
-        public AuthController(IConfiguration configuration, ILoginRepository repository, ILog log)
+        public AuthController(IConfiguration configuration, ILoginRepository repository, ILog log, IProducer mbProducer)
         {
             _configuration = configuration;
             _repository = repository;
             _log = log;
+            _mbProducer = mbProducer;
         }
         
         /// <summary>
@@ -108,6 +112,19 @@ namespace LoginMS.Web.Controllers
                 Password = password,
                 Token = token
             });
+            
+            // Notify the kafka message broker that a new user has been registered
+            var userRegisteredEvent = new UserRegisteredEvent {
+                User = new User
+                {
+                    Id = userId,
+                    Name = name,
+                    Surname = surname,
+                    Email = email,
+                    Phone = phone
+                }
+            };
+            await _mbProducer.Send (userRegisteredEvent, "UserRegistration");
 
             return Ok();
         }
