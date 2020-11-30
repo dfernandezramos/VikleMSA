@@ -34,23 +34,36 @@ namespace LoginMS.Web
         public async Task Seed()
         {
             _log.Info("Populating Login database...");
-            var clientId = Guid.NewGuid().ToString();
-            var workerId = Guid.NewGuid().ToString();
 
-            await _repository.NewAuthData(new AuthData
+            var clientEmail = "client@email.com";
+            var client = await _repository.GetAuthDataByEmail(clientEmail);
+
+            if (client == null)
             {
-                UserId = clientId,
-                Email = "client@email.com",
-                Password = "Client123",
-                Token = GenerateToken("client@email.com", UserRole.Client.ToString(), clientId)
-            }, default);
-            await _repository.NewAuthData(new AuthData
+                var clientId = "28feef62-08c1-4b14-9ea4-13e007d1f002";
+                await _repository.NewAuthData(new AuthData
+                {
+                    UserId = clientId,
+                    Email = clientEmail,
+                    Password = "Client123",
+                    Token = GenerateToken(clientEmail, UserRole.Client.ToString(), clientId)
+                }, default);
+            }
+            
+            var workerEmail = "worker@email.com";
+            var worker = await _repository.GetAuthDataByEmail(workerEmail);
+            
+            if (worker == null)
             {
-                UserId = workerId,
-                Email = "worker@email.com",
-                Password = "Worker123",
-                Token = GenerateToken("worker@email.com", UserRole.Client.ToString(), workerId)
-            }, default);
+                var workerId = "0c0910e9-0ab2-4d70-9ea2-21198dfb36ac";
+                await _repository.NewAuthData(new AuthData
+                {
+                    UserId = workerId,
+                    Email = "worker@email.com",
+                    Password = "Worker123",
+                    Token = GenerateToken(workerEmail, UserRole.Client.ToString(), workerId)
+                }, default);
+            }
             
             _log.Info("Login database population success");
         }
