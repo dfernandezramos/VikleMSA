@@ -4,8 +4,17 @@ using Newtonsoft.Json;
 
 namespace GatewayMS
 {
+    /// <summary>
+    /// This class contains the implementation of the json loader for deserializing json objects
+    /// </summary>
     public class JsonLoader
     {
+        /// <summary>
+        /// This method deserializes the provided json file into the specified generic object type
+        /// </summary>
+        /// <param name="filePath">The file path</param>
+        /// <typeparam name="T">The generic object type</typeparam>
+        /// <returns>The generic object filled with the data extracted from the json file</returns>
         public static T LoadFromFile<T>(string filePath)
         {
             using (StreamReader reader = new StreamReader(filePath))
@@ -16,6 +25,12 @@ namespace GatewayMS
             }
         }
 
+        /// <summary>
+        /// This method deserializes the provided json object into the specified generic object type
+        /// </summary>
+        /// <param name="jsonObject">The json object to be deserialized</param>
+        /// <typeparam name="T">The generic object type</typeparam>
+        /// <returns>The generic object filled with the data extracted from the json object</returns>
         public static T Deserialize<T>(object jsonObject)
         {
             return JsonConvert.DeserializeObject<T>(Convert.ToString(jsonObject));

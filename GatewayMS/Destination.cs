@@ -6,10 +6,17 @@ using Microsoft.AspNetCore.Http;
 
 namespace GatewayMS
 {
+    /// <summary>
+    /// This class contains the implementation of the destination for the gateway service
+    /// </summary>
     public class Destination
     {
-        public string Path { get; set; }
         static HttpClient client = new HttpClient();
+        
+        /// <summary>
+        /// Gets or sets the destination path
+        /// </summary>
+        public string Path { get; set; }
         
         public Destination(string uri)
         {
@@ -21,6 +28,10 @@ namespace GatewayMS
             Path = "/";
         }
 
+        /// <summary>
+        /// This method sends the request to the destination path
+        /// </summary>
+        /// <param name="request">The http request</param>
         public async Task<HttpResponseMessage> SendRequest(HttpRequest request)
         {
             string requestContent;
