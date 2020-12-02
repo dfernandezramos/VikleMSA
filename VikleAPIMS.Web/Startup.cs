@@ -35,8 +35,6 @@ namespace VikleAPIMS.Web
             services.AddSingleton<ILog>(log);
             
             ConfigureRepositories(services);
-            ConfigureMessageBroker (services);
-            ConfigureEventHandlers (services);
             services.AddControllers();
             
             services.AddSwaggerGen(c =>
@@ -77,6 +75,9 @@ namespace VikleAPIMS.Web
                 });
             
             services.AddTransient<DatabasePopulator>();
+            services.AddCors();
+            ConfigureMessageBroker (services);
+            ConfigureEventHandlers (services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -111,6 +112,11 @@ namespace VikleAPIMS.Web
             {
                 endpoints.MapControllers();
             });
+
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
             
             dbPopulator.Seed().Wait();
         }
@@ -131,7 +137,7 @@ namespace VikleAPIMS.Web
             services.PostConfigure<EventConsumerConfiguration> (options => {
                 options.RegisterConsumer<UserRegisteredEvent, RegisteredUserHandler> ();
             });
-            services.AddSingleton<IHostedService, Consumer> ();
+            services.AddHostedService<Consumer>();
         }
 
         void ConfigureEventHandlers (IServiceCollection services)
