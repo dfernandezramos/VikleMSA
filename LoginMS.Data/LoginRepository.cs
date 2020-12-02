@@ -27,6 +27,17 @@ namespace LoginMS.Data
         {
             return await Task.FromResult(AuthData.Find(c => c.Email == email, new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken));
         }
+        
+        /// <summary>
+        /// This method gets the authorization data for the given email.
+        /// </summary>
+        /// <param name="userId">The user identifier</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The authorization data</returns>
+        public async Task<AuthData> GetAuthDataById(string userId, CancellationToken cancellationToken = default)
+        {
+            return await Task.FromResult(AuthData.Find(c => c.UserId == userId, new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken));
+        }
 
         /// <summary>
         /// This method saves in the database the provided user authorization data.
@@ -47,10 +58,10 @@ namespace LoginMS.Data
         /// <param name="cancellationToken">The cancellation token</param>
         public async Task UpdateAuthData(string userId, string email, string password, CancellationToken cancellationToken = default)
         {
-            var authData = await GetAuthDataByEmail(userId, cancellationToken);
+            var authData = await GetAuthDataById(userId, cancellationToken);
             if (authData == default(AuthData))
             {
-                throw new AuthNotFoundException($"Failed to find auth data with ID {userId}");
+                throw new AuthNotFoundException($"Failed to find auth data with user id {userId}");
             }
             authData.Email = email;
             authData.Password = password;
@@ -68,7 +79,7 @@ namespace LoginMS.Data
             
             if (result != null)
             {
-                await UpdateAuthData(result.UserId, result.Email, "resetPassword", cancellationToken);
+                await UpdateAuthData(result.UserId, result.Email, "lelelele", cancellationToken);
             }
         }
     }
