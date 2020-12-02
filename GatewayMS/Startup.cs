@@ -27,6 +27,7 @@ namespace GatewayMS
             {
                 var content = await router.RouteRequest(context.Request);
                 context.Response.StatusCode = (int)content.StatusCode;
+                context.Response.ContentType = content.Content.Headers.ContentType?.ToString();
                 await context.Response.WriteAsync(await content.Content.ReadAsStringAsync());
             });
         }
