@@ -69,7 +69,8 @@ namespace VikleAPIMS.Web
                         ValidateIssuer = true,  
                         ValidateAudience = true,  
                         ValidAudience = Configuration["JWT:ValidAudience"],  
-                        ValidIssuer = Configuration["JWT:ValidIssuer"],  
+                        ValidIssuer = Configuration["JWT:ValidIssuer"],
+                        ValidateLifetime = false,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))  
                     };  
                 });
