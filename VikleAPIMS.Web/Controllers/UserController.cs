@@ -124,7 +124,7 @@ namespace VikleAPIMS.Web.Controllers
         /// <param name="vehicle">The new vehicle data to be saved in the API</param>
         [HttpPost]
         [Authorize]
-        [Route ("vehicles/{id}")] // POST api/user/vehicles/1111-ABC
+        [Route ("vehicles/{oldPlateNumber}")] // POST api/user/vehicles/1111-ABC
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
