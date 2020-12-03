@@ -1,5 +1,7 @@
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -45,6 +47,12 @@ namespace GatewayMS
 
             using (var newRequest = new HttpRequestMessage(new HttpMethod(request.Method), CreateDestinationUri(request)))
             {
+                foreach (var header in request.Headers.Keys)
+                {
+                    var value = request.Headers[header].First();
+                    newRequest.Headers.Add(header, value);
+                }
+                
                 newRequest.Content = new StringContent(requestContent, Encoding.UTF8, request.ContentType);
                 return await client.SendAsync(newRequest);
             }
