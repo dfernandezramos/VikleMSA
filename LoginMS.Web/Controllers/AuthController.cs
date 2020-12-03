@@ -71,7 +71,7 @@ namespace LoginMS.Web.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ResetPassword(string email)
+        public async Task<IActionResult> ResetPassword([FromBody]string email)
         {
             _log.Info("Calling reset password endpoint...");
 
@@ -82,20 +82,16 @@ namespace LoginMS.Web.Controllers
         /// <summary>
         /// This method puts the provided user signup data in the login database.
         /// </summary>
-        /// <param name="email">The user email</param>
-        /// <param name="password">The user password</param>
-        /// <param name="name">The user name</param>
-        /// <param name="surname">The user surname</param>
-        /// <param name="phone">The user phone number</param>
+        /// <param name="data">The signup data</param>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> SignUp(string email, string password, string name, string surname, string phone)
+        public async Task<IActionResult> SignUp([FromBody]SignupData data)
         {
             _log.Info("Calling signup endpoint...");
 
-            var authData = await _repository.GetAuthDataByEmail(email);
+            var authData = await _repository.GetAuthDataByEmail(data.Email);
             if (authData != null)
             {
                 _log.Error("User with the provided email already exists");
@@ -103,13 +99,13 @@ namespace LoginMS.Web.Controllers
             }
 
             var userId = Guid.NewGuid().ToString();
-            var token = GenerateToken(name, UserRole.Client.ToString(), userId);
+            var token = GenerateToken(data.Email, UserRole.Client.ToString(), userId);
             
             await _repository.NewAuthData(new AuthData
             {
                 UserId = userId,
-                Email = email,
-                Password = password,
+                Email = data.Email,
+                Password = data.Password,
                 Token = token
             });
             
@@ -118,10 +114,10 @@ namespace LoginMS.Web.Controllers
                 User = new User
                 {
                     Id = userId,
-                    Name = name,
-                    Surname = surname,
-                    Email = email,
-                    Phone = phone
+                    Name = data.Name,
+                    Surname = data.Surname,
+                    Email = data.Email,
+                    Phone = data.Phone
                 }
             };
             await _mbProducer.Send (userRegisteredEvent, "UserRegistration");
