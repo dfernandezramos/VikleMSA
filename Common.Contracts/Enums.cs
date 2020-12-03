@@ -3,11 +3,11 @@ namespace Common.Contracts
     /// <summary>
     /// This enumerator contains the user different roles.
     /// </summary>
-    public enum UserRole
+    public static class UserRole
     {
-        Admin,
-        Client,
-        Worker
+        public const string Admin = "Admin";
+        public const string Client = "Client";
+        public const string Worker = "Worker";
     }
     
     /// <summary>

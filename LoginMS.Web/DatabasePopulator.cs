@@ -46,7 +46,7 @@ namespace LoginMS.Web
                     UserId = clientId,
                     Email = clientEmail,
                     Password = "Client123",
-                    Token = GenerateToken(clientEmail, UserRole.Client.ToString(), clientId)
+                    Token = GenerateToken(clientEmail, UserRole.Client, clientId)
                 }, default);
             }
             
@@ -61,7 +61,22 @@ namespace LoginMS.Web
                     UserId = workerId,
                     Email = "worker@email.com",
                     Password = "Worker123",
-                    Token = GenerateToken(workerEmail, UserRole.Client.ToString(), workerId)
+                    Token = GenerateToken(workerEmail, UserRole.Worker, workerId)
+                }, default);
+            }
+            
+            var adminEmail = "admin@email.com";
+            var admin = await _repository.GetAuthDataByEmail(adminEmail);
+            
+            if (admin == null)
+            {
+                var adminId = "115deaa7-5405-4db4-8ee8-cc8162d67bbb";
+                await _repository.NewAuthData(new AuthData
+                {
+                    UserId = adminId,
+                    Email = "admin@email.com",
+                    Password = "Admin123",
+                    Token = GenerateToken(adminEmail, UserRole.Admin, adminId)
                 }, default);
             }
             

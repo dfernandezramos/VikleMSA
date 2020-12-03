@@ -15,7 +15,7 @@ namespace VikleAPIMS.Web.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize (Roles = UserRole.Worker)]
     public class WorkshopController : ControllerBase
     {
         private readonly ILog _log;

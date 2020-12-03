@@ -12,6 +12,7 @@ using Common.Contracts.Events;
 using Common.Domain;
 using LoginMS.Data;
 using MessageBroker.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 
 namespace LoginMS.Web.Controllers
@@ -91,6 +92,28 @@ namespace LoginMS.Web.Controllers
         {
             _log.Info("Calling signup endpoint...");
 
+            return await RegisterUser(data, UserRole.Client);
+        }
+        
+        /// <summary>
+        /// This method puts the provided user signup data in the login database.
+        /// </summary>
+        /// <param name="data">The signup data</param>
+        [HttpPut]
+        [Route("worker")]
+        [Authorize (Roles = UserRole.Admin)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> RegisterWorker([FromBody]SignupData data)
+        {
+            _log.Info("Calling signup worker endpoint...");
+            
+            return await RegisterUser(data, UserRole.Worker);
+        }
+
+        async Task<IActionResult> RegisterUser(SignupData data, string role)
+        {
             var authData = await _repository.GetAuthDataByEmail(data.Email);
             if (authData != null)
             {
@@ -99,7 +122,7 @@ namespace LoginMS.Web.Controllers
             }
 
             var userId = Guid.NewGuid().ToString();
-            var token = GenerateToken(data.Email, UserRole.Client.ToString(), userId);
+            var token = GenerateToken(data.Email, role.ToString(), userId);
             
             await _repository.NewAuthData(new AuthData
             {

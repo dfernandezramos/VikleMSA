@@ -29,10 +29,5 @@ namespace Common.Contracts
         /// Gets or sets the user password
         /// </summary>
         public string Password { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the user repeated password
-        /// </summary>
-        public string RepeatedPassword { get; set; }
     }
 }

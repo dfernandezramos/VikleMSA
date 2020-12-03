@@ -148,6 +148,22 @@ namespace VikleAPIMS.Web
                     IdWorkshop = "1"
                 }, default);
             }
+            
+            var adminEmail = "admin@email.com";
+            var admin = await _repository.GetUserByEmail(adminEmail);
+            
+            if (admin == null)
+            {
+                var adminId = "115deaa7-5405-4db4-8ee8-cc8162d67bbb";
+                await _repository.NewUser(new User
+                {
+                    Id = adminId,
+                    Email = adminEmail,
+                    Name = "Admin",
+                    Surname = "Test",
+                    Phone = "123456789"
+                }, default);
+            }
         }
     }
 }
