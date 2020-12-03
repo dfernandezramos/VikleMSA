@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -50,7 +52,7 @@ namespace GatewayMS
                 foreach (var header in request.Headers.Keys)
                 {
                     var value = request.Headers[header].First();
-                    newRequest.Headers.Add(header, value);
+                    newRequest.Headers.TryAddWithoutValidation(header, value);
                 }
                 
                 newRequest.Content = new StringContent(requestContent, Encoding.UTF8, request.ContentType);
