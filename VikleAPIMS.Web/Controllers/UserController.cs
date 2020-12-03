@@ -41,7 +41,7 @@ namespace VikleAPIMS.Web.Controllers
         {
             _log.Info("Calling get user endpoint...");
 
-            var user = _repository.GetUserById(userId);
+            var user = await _repository.GetUserById(userId);
 
             if (user == null)
             {
@@ -55,19 +55,14 @@ namespace VikleAPIMS.Web.Controllers
         /// <summary>
         /// This method updates the provided data for the provided user identifier.
         /// </summary>
-        /// <param name="userId">The user identifier</param>
-        /// <param name="email">The user email</param>
-        /// <param name="password">The user password</param>
-        /// <param name="name">The user name</param>
-        /// <param name="surname">The user surname</param>
-        /// <param name="phone">The user phone</param>
+        /// <param name="user">The user data</param>
         [HttpPost]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateUserData(User user)
+        public async Task<IActionResult> UpdateUserData([FromBody]User user)
         {
             _log.Info("Calling update user endpoint...");
 
@@ -99,7 +94,7 @@ namespace VikleAPIMS.Web.Controllers
         {
             _log.Info("Calling get user vehicles endpoint...");
 
-            var vehicles = _repository.GetUserVehicles(userId);
+            var vehicles = await _repository.GetUserVehicles(userId);
             return Ok(vehicles);
         }
         
@@ -129,11 +124,11 @@ namespace VikleAPIMS.Web.Controllers
         /// <param name="vehicle">The new vehicle data to be saved in the API</param>
         [HttpPost]
         [Authorize]
-        [Route ("vehicles")]
+        [Route ("vehicles/{id}")] // POST api/user/vehicles/1111-ABC
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateUserVehicle(string oldPlateNumber, Vehicle vehicle)
+        public async Task<IActionResult> UpdateUserVehicle(string oldPlateNumber, [FromBody]Vehicle vehicle)
         {
             _log.Info("Calling update user vehicle endpoint...");
 
@@ -171,7 +166,7 @@ namespace VikleAPIMS.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> NewUserDate(Date date)
+        public async Task<IActionResult> NewUserDate([FromBody]Date date)
         {
             _log.Info("Calling new user date endpoint...");
 

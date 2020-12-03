@@ -55,7 +55,7 @@ namespace VikleAPIMS.Web.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateWorkshopReparation(Reparation reparation)
+        public async Task<IActionResult> UpdateWorkshopReparation([FromBody]Reparation reparation)
         {
             _log.Info("Calling update workshop reparation endpoint");
             

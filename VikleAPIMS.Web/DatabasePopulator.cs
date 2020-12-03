@@ -61,7 +61,7 @@ namespace VikleAPIMS.Web
                     AirFilter = true,
                     Date = DateTime.UtcNow,
                     GasFilter = true,
-                    PlateNumber = "1234 ABC",
+                    PlateNumber = "1234ABC",
                     Type = ReparationType.Maintenance,
                     Status = ReparationStatus.Repaired,
                     Details = new List<string>
@@ -78,14 +78,14 @@ namespace VikleAPIMS.Web
         
         async Task PopulateDates()
         {
-            var result = await _repository.GetDateById("1234 ABC");
+            var result = await _repository.GetDateById("1234ABC");
 
             if (result == null)
             {
                 var date = new Date
                 {
                     WorkshopId = "1",
-                    PlateNumber = "1234 ABC",
+                    PlateNumber = "1234ABC",
                     ReparationDate = DateTime.UtcNow,
                     Reason = ReparationType.Maintenance,
                     IdClient = "28feef62-08c1-4b14-9ea4-13e007d1f002",
@@ -97,13 +97,13 @@ namespace VikleAPIMS.Web
         
         async Task PopulateVehicles()
         {
-            var result = await _repository.GetVehicleById("1234 ABC");
+            var result = await _repository.GetVehicleById("1234ABC");
 
             if (result == null)
             {
                 var vehicle = new Vehicle
                 {
-                    PlateNumber = "1234 ABC",
+                    PlateNumber = "1234ABC",
                     IdClient = "28feef62-08c1-4b14-9ea4-13e007d1f002",
                     Model = "A3",
                     VehicleType = VehicleType.Car,
