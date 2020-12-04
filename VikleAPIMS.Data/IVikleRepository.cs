@@ -135,6 +135,14 @@ namespace VikleAPIMS.Data
         Task NewDate(Date date, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// This method updates the date status of the provided vehicle in the database
+        /// </summary>
+        /// <param name="plateNumber">The vehicle plate number</param>
+        /// <param name="status">The reparation status</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        Task UpdateDateStatus(string plateNumber, ReparationStatus status, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// This method gets the date data with provided plate number.
         /// </summary>
         /// <param name="plateNumber">The vehicle plate number</param>

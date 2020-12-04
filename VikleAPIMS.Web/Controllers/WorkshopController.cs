@@ -69,6 +69,7 @@ namespace VikleAPIMS.Web.Controllers
                 try
                 {
                     await _repository.UpdateWorkshopReparation(reparation);
+                    await _repository.UpdateDateStatus(reparation.PlateNumber, reparation.Status);
                 }
                 catch (ArgumentException e)
                 {

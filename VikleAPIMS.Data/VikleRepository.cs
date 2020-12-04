@@ -245,7 +245,7 @@ namespace VikleAPIMS.Data
         }
 
         /// <summary>
-        /// This method inserts the provided date information in the databse
+        /// This method inserts the provided date information in the database
         /// </summary>
         /// <param name="date">The date information</param>
         /// <param name="cancellationToken">The cancellation token</param>
@@ -259,6 +259,25 @@ namespace VikleAPIMS.Data
             }
             
             await Dates.InsertOneAsync(date, new InsertOneOptions { BypassDocumentValidation = false }, cancellationToken);
+        }
+        
+        /// <summary>
+        /// This method updates the date status of the provided vehicle in the database
+        /// </summary>
+        /// <param name="plateNumber">The vehicle plate number</param>
+        /// <param name="status">The reparation status</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        public async Task UpdateDateStatus(string plateNumber, ReparationStatus status, CancellationToken cancellationToken = default)
+        {
+            var result = await GetDateById(plateNumber, cancellationToken);
+            
+            if (result == null)
+            {
+                throw new ArgumentException("The provided vehicle has not a date");
+            }
+
+            result.Status = status;
+            await Dates.ReplaceOneAsync(c => c.Id == result.Id, result, new ReplaceOptions { IsUpsert = false }, cancellationToken);
         }
         
         /// <summary>
