@@ -192,14 +192,14 @@ namespace VikleAPIMS.Data
         {
             var vehicle = await GetVehicleById(plateNumber, cancellationToken);
 
-            if (vehicle.IdDrivers.Contains(userId))
+            if (vehicle.IdDrivers != null && vehicle.IdDrivers.Contains(userId))
             {
                 vehicle.IdDrivers.Remove(userId);
                 await UpdateVehicle(vehicle.PlateNumber, vehicle, cancellationToken);
             }
             else
             {
-                if (vehicle.IdDrivers.Any())
+                if (vehicle.IdDrivers != null && vehicle.IdDrivers.Any())
                 {
                     var id = vehicle.IdDrivers.First();
                     vehicle.IdClient = id;
