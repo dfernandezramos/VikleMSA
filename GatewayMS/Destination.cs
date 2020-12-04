@@ -68,9 +68,10 @@ namespace GatewayMS
             string endpoint = "";
             string[] endpointSplit = requestPath.Substring(1).Split('/');
 
-            if (endpointSplit.Length > 1)
-                endpoint = endpointSplit[1];
-
+            for (int i = 1; i < endpointSplit.Length; i++)
+            {
+                endpoint += endpointSplit[i] + '/';
+            }
 
             return Path + endpoint + queryString;
         }
