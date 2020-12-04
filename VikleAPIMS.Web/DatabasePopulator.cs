@@ -59,7 +59,7 @@ namespace VikleAPIMS.Web
                     Id = id,
                     WorkshopId = "1",
                     AirFilter = true,
-                    Date = DateTime.UtcNow,
+                    Date = DateTime.UtcNow.AddMonths(-1),
                     GasFilter = true,
                     PlateNumber = "1234ABC",
                     Type = ReparationType.Maintenance,
