@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Common.Contracts;
 using Common.Domain;
@@ -131,6 +132,14 @@ namespace VikleAPIMS.Web.Controllers
         public async Task<IActionResult> UpdateUserVehicle(string oldPlateNumber, [FromBody]Vehicle vehicle)
         {
             _log.Info("Calling update user vehicle endpoint...");
+            var clientId = this.User.Claims.First(i => i.Type == "jti").Value;
+            if (string.IsNullOrEmpty(vehicle.IdClient))
+            {
+                vehicle.IdClient = clientId;
+            } else if (vehicle.IdClient != clientId && !vehicle.IdDrivers.Contains(clientId))
+            {
+                vehicle.IdDrivers.Add(clientId);
+            }
 
             await _repository.UpdateVehicle(oldPlateNumber, vehicle);
             return Ok();
