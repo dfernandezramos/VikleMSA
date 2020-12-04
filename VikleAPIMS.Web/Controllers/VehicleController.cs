@@ -68,7 +68,7 @@ namespace VikleAPIMS.Web.Controllers
         /// <param name="plateNumber">The vehicle plate number</param>
         /// <returns>The current reparation of the vehicle</returns>
         [HttpGet]
-        [Route ("reparations/current")]
+        [Route ("current")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(Reparation),StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
