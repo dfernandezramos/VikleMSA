@@ -25,7 +25,7 @@ namespace LoginMS.Data
         /// <returns>The authorization data</returns>
         public async Task<AuthData> GetAuthDataByEmail(string email, CancellationToken cancellationToken = default)
         {
-            return await Task.FromResult(AuthData.Find(c => c.Email == email, new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken));
+            return await Task.FromResult(AuthData.Find(c => c.Email == email.ToLower(), new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken));
         }
         
         /// <summary>
@@ -63,7 +63,7 @@ namespace LoginMS.Data
             {
                 throw new AuthNotFoundException($"Failed to find auth data with user id {userId}");
             }
-            authData.Email = email;
+            authData.Email = email.ToLower();
             authData.Password = password;
             await AuthData.ReplaceOneAsync(c => c.UserId == userId, authData, new ReplaceOptions { IsUpsert = false }, cancellationToken);
         }
@@ -79,7 +79,7 @@ namespace LoginMS.Data
             
             if (result != null)
             {
-                await UpdateAuthData(result.UserId, result.Email, "lelelele", cancellationToken);
+                await UpdateAuthData(result.UserId, result.Email.ToLower(), "resetPassword", cancellationToken);
             }
         }
     }

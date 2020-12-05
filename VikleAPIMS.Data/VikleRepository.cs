@@ -168,7 +168,7 @@ namespace VikleAPIMS.Data
         /// <returns>The user data</returns>
         public async Task<User> GetUserByEmail(string email, CancellationToken cancellationToken = default)
         {
-            return await Task.FromResult(Users.Find(c => c.Email == email, new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken)); 
+            return await Task.FromResult(Users.Find(c => c.Email == email.ToLower(), new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken)); 
         }
 
         /// <summary>
