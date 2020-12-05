@@ -98,7 +98,7 @@ namespace VikleAPIMS.Web
         
         async Task PopulateVehicles()
         {
-            var result = await _repository.GetVehicleById("1234ABC");
+            var result = await _repository.GetVehicleByPlateNumber("1234ABC");
 
             if (result == null)
             {

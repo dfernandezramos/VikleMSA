@@ -107,7 +107,7 @@ namespace VikleAPIMS.Data
         /// <returns>The vehicle owner</returns>
         public async Task<User> GetVehicleOwner(string plateNumber, CancellationToken cancellationToken = default)
         {
-            var vehicle = await GetVehicleById(plateNumber, cancellationToken);
+            var vehicle = await GetVehicleByPlateNumber(plateNumber, cancellationToken);
             return await GetUserById(vehicle.IdClient, cancellationToken);
         }
         
@@ -117,7 +117,7 @@ namespace VikleAPIMS.Data
         /// <param name="plateNumber">The vehicle plate number</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns>The vehicle data</returns>
-        public async Task<Vehicle> GetVehicleById(string plateNumber, CancellationToken cancellationToken = default)
+        public async Task<Vehicle> GetVehicleByPlateNumber(string plateNumber, CancellationToken cancellationToken = default)
         {
             return await Task.FromResult(Vehicles.Find(c => c.PlateNumber == plateNumber, new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken));
         }
@@ -190,7 +190,7 @@ namespace VikleAPIMS.Data
         /// <param name="cancellationToken">The cancellation token</param>
         public async Task DeleteUserVehicle(string userId, string plateNumber, CancellationToken cancellationToken = default)
         {
-            var vehicle = await GetVehicleById(plateNumber, cancellationToken);
+            var vehicle = await GetVehicleByPlateNumber(plateNumber, cancellationToken);
 
             if (vehicle.IdDrivers != null && vehicle.IdDrivers.Contains(userId))
             {
@@ -221,7 +221,7 @@ namespace VikleAPIMS.Data
         /// <param name="cancellationToken">The cancellation token</param>
         public async Task UpdateVehicle(string plateNumber, Vehicle vehicle, CancellationToken cancellationToken = default)
         {
-            var result = await GetVehicleById(plateNumber, cancellationToken);
+            var result = await GetVehicleByPlateNumber(plateNumber, cancellationToken);
             
             if (result == null)
             {

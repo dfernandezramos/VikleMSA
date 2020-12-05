@@ -70,7 +70,7 @@ namespace VikleAPIMS.Data
         /// <param name="plateNumber">The vehicle plate number</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns>The vehicle data</returns>
-        Task<Vehicle> GetVehicleById(string plateNumber, CancellationToken cancellationToken = default);
+        Task<Vehicle> GetVehicleByPlateNumber(string plateNumber, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This method gets the user data for the given user identifier.
