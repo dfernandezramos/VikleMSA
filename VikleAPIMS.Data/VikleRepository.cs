@@ -83,7 +83,7 @@ namespace VikleAPIMS.Data
             CancellationToken cancellationToken = default)
         {
             return await Task.FromResult(Reparations.Find(c => c.PlateNumber == plateNumber &&
-                c.Status != ReparationStatus.Repaired || c.Status != ReparationStatus.Rejected,
+                (c.Status != ReparationStatus.Completed && c.Status != ReparationStatus.Rejected),
                 new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken));
         }
 
