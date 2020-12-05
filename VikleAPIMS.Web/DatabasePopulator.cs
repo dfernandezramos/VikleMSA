@@ -58,12 +58,29 @@ namespace VikleAPIMS.Web
                 {
                     Id = id,
                     WorkshopId = "1",
+                    Date = DateTime.UtcNow,
+                    PlateNumber = "1234ABC",
+                    Type = ReparationType.Reparation,
+                    Status = ReparationStatus.Repairing
+                };
+                await _repository.NewReparation(reparation);
+            }
+            
+            id = "8cee76b3-6ed9-4fd5-af23-8a641c3dac63";
+            result = await _repository.GetReparationById(id);
+
+            if (result == null)
+            {
+                var reparation = new Reparation
+                {
+                    Id = id,
+                    WorkshopId = "1",
                     AirFilter = true,
                     Date = DateTime.UtcNow.AddMonths(-1),
                     GasFilter = true,
                     PlateNumber = "1234ABC",
                     Type = ReparationType.Maintenance,
-                    Status = ReparationStatus.Repaired,
+                    Status = ReparationStatus.Completed,
                     Details = new List<string>
                     {
                         "Changed oil filter",
@@ -88,9 +105,9 @@ namespace VikleAPIMS.Web
                     WorkshopId = "1",
                     PlateNumber = "1234ABC",
                     ReparationDate = DateTime.UtcNow,
-                    Reason = ReparationType.Maintenance,
+                    Reason = ReparationType.Reparation,
                     IdClient = "28feef62-08c1-4b14-9ea4-13e007d1f002",
-                    Status = ReparationStatus.Pending
+                    Status = ReparationStatus.Repairing
                 };
                 await _repository.NewDate(date);
             }
