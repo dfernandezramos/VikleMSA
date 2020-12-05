@@ -51,7 +51,7 @@ namespace Common.Contracts
         /// <summary>
         /// Gets or sets the identifiers of the vehicle additional drivers.
         /// </summary>
-        public List<string> IdDrivers { get; set; }
+        public List<string> IdDrivers { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets a value indicating if this model has all required fields properly filled
