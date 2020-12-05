@@ -185,7 +185,7 @@ namespace VikleAPIMS.Web.Controllers
             }
             catch (ArgumentException)
             {
-                _log.Error("Date update user date endpoint...");
+                _log.Error("The provided vehicle already has a date");
                 return BadRequest();
             }
 

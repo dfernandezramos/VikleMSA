@@ -148,7 +148,7 @@ namespace VikleAPIMS.Data
         /// <param name="plateNumber">The vehicle plate number</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns>The date data</returns>
-        Task<Date> GetDateById(string plateNumber, CancellationToken cancellationToken = default);
+        Task<Date> GetDateByPlateNumber(string plateNumber, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This method inserts a new workshop in the database.

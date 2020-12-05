@@ -251,13 +251,14 @@ namespace VikleAPIMS.Data
         /// <param name="cancellationToken">The cancellation token</param>
         public async Task NewDate(Date date, CancellationToken cancellationToken = default)
         {
-            var result = await GetDateById(date.PlateNumber, cancellationToken);
+            var result = await GetDateByPlateNumber(date.PlateNumber, cancellationToken);
             
             if (result != null)
             {
                 throw new ArgumentException("The provided vehicle already has a date");
             }
             
+            date.Id = Guid.NewGuid().ToString();
             await Dates.InsertOneAsync(date, new InsertOneOptions { BypassDocumentValidation = false }, cancellationToken);
         }
         
@@ -269,7 +270,7 @@ namespace VikleAPIMS.Data
         /// <param name="cancellationToken">The cancellation token</param>
         public async Task UpdateDateStatus(string plateNumber, ReparationStatus status, CancellationToken cancellationToken = default)
         {
-            var result = await GetDateById(plateNumber, cancellationToken);
+            var result = await GetDateByPlateNumber(plateNumber, cancellationToken);
             
             if (result == null)
             {
@@ -286,7 +287,7 @@ namespace VikleAPIMS.Data
         /// <param name="plateNumber">The vehicle plate number</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns>The date data</returns>
-        public async Task<Date> GetDateById(string plateNumber, CancellationToken cancellationToken = default)
+        public async Task<Date> GetDateByPlateNumber(string plateNumber, CancellationToken cancellationToken = default)
         {
             return await Task.FromResult(Dates.Find(c => c.PlateNumber == plateNumber, new FindOptions { AllowPartialResults = false }).FirstOrDefault(cancellationToken));
         }

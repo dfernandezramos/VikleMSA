@@ -78,12 +78,13 @@ namespace VikleAPIMS.Web
         
         async Task PopulateDates()
         {
-            var result = await _repository.GetDateById("1234ABC");
+            var result = await _repository.GetDateByPlateNumber("1234ABC");
 
             if (result == null)
             {
                 var date = new Date
                 {
+                    Id = Guid.NewGuid().ToString(),
                     WorkshopId = "1",
                     PlateNumber = "1234ABC",
                     ReparationDate = DateTime.UtcNow,
