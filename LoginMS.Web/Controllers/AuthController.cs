@@ -51,7 +51,7 @@ namespace LoginMS.Web.Controllers
         {
             _log.Info("Calling get token endpoint...");
 
-            var authData = await _repository.GetAuthDataByEmail(email);
+            var authData = await _repository.GetAuthDataByEmail(email.ToLower());
             if (authData == null || authData.Password != password)
             {
                 _log.Error("User with the provided credentials not found");
@@ -76,7 +76,7 @@ namespace LoginMS.Web.Controllers
         {
             _log.Info("Calling reset password endpoint...");
 
-            await _repository.ResetPassword(email);
+            await _repository.ResetPassword(email.ToLower());
             return Ok();
         }
         
@@ -114,7 +114,7 @@ namespace LoginMS.Web.Controllers
 
         async Task<IActionResult> RegisterUser(SignupData data, string role)
         {
-            var authData = await _repository.GetAuthDataByEmail(data.Email);
+            var authData = await _repository.GetAuthDataByEmail(data.Email.ToLower());
             if (authData != null)
             {
                 _log.Error("User with the provided email already exists");
@@ -122,12 +122,12 @@ namespace LoginMS.Web.Controllers
             }
 
             var userId = Guid.NewGuid().ToString();
-            var token = GenerateToken(data.Email, role.ToString(), userId);
+            var token = GenerateToken(data.Email.ToLower(), role.ToString(), userId);
             
             await _repository.NewAuthData(new AuthData
             {
                 UserId = userId,
-                Email = data.Email,
+                Email = data.Email.ToLower(),
                 Password = data.Password,
                 Token = token
             });
@@ -139,7 +139,7 @@ namespace LoginMS.Web.Controllers
                     Id = userId,
                     Name = data.Name,
                     Surname = data.Surname,
-                    Email = data.Email,
+                    Email = data.Email.ToLower(),
                     Phone = data.Phone
                 }
             };
