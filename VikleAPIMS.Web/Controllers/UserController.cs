@@ -134,10 +134,14 @@ namespace VikleAPIMS.Web.Controllers
             _log.Info("Calling update user vehicle endpoint...");
             var clientId = this.User.Claims.First(i => i.Type == "jti").Value;
             var originalVehicle = await _repository.GetVehicleByPlateNumber(oldPlateNumber);
-            vehicle.Id = originalVehicle.Id;
-            vehicle.IdClient = originalVehicle.IdClient;
-            vehicle.IdDrivers = originalVehicle.IdDrivers;
             
+            if (originalVehicle != null)
+            {
+                vehicle.Id = originalVehicle.Id;
+                vehicle.IdClient = originalVehicle.IdClient;
+                vehicle.IdDrivers = originalVehicle.IdDrivers;
+            }
+
             if (string.IsNullOrEmpty(vehicle.IdClient))
             {
                 vehicle.IdClient = clientId;
