@@ -26,7 +26,7 @@ namespace Common.Contracts
         /// <summary>
         /// Gets or sets the date of the reparation.
         /// </summary>
-        public DateTime Date { get; set; }
+        public long Date { get; set; }
         
         /// <summary>
         /// Gets or sets the type of the reparation.

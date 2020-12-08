@@ -203,7 +203,7 @@ namespace VikleAPIMS.Web.Controllers
                 Id = Guid.NewGuid().ToString(),
                 WorkshopId = date.WorkshopId,
                 PlateNumber = date.PlateNumber,
-                Date = DateTime.UtcNow,
+                Date = date.ReparationDate,
                 Type = date.Reason,
                 Status = date.Status,
                 Details = new List<string>()

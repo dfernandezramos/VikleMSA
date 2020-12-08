@@ -58,7 +58,7 @@ namespace VikleAPIMS.Web
                 {
                     Id = id,
                     WorkshopId = "1",
-                    Date = DateTime.UtcNow,
+                    Date = DateTime.UtcNow.Ticks,
                     PlateNumber = "1234ABC",
                     Type = ReparationType.Reparation,
                     Status = ReparationStatus.Repairing
@@ -76,7 +76,7 @@ namespace VikleAPIMS.Web
                     Id = id,
                     WorkshopId = "1",
                     AirFilter = true,
-                    Date = DateTime.UtcNow.AddMonths(-1),
+                    Date = DateTime.UtcNow.AddMonths(-1).Ticks,
                     GasFilter = true,
                     PlateNumber = "1234ABC",
                     Type = ReparationType.Maintenance,
@@ -104,7 +104,7 @@ namespace VikleAPIMS.Web
                     Id = Guid.NewGuid().ToString(),
                     WorkshopId = "1",
                     PlateNumber = "1234ABC",
-                    ReparationDate = DateTime.UtcNow,
+                    ReparationDate = DateTime.UtcNow.Ticks,
                     Reason = ReparationType.Reparation,
                     IdClient = "28feef62-08c1-4b14-9ea4-13e007d1f002",
                     Status = ReparationStatus.Repairing

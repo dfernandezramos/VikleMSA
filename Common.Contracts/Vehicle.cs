@@ -36,12 +36,12 @@ namespace Common.Contracts
         /// <summary>
         /// Gets or sets the last TBDS date of the vehicle.
         /// </summary>
-        public DateTime LastTBDS { get; set; }
+        public long LastTBDS { get; set; }
         
         /// <summary>
         /// Gets or sets the last ITV date of the vehicle.
         /// </summary>
-        public DateTime LastITV { get; set; }
+        public long LastITV { get; set; }
         
         /// <summary>
         /// Gets or sets the identifier of the vehicle owner.
