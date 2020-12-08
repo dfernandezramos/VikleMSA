@@ -1,0 +1,568 @@
+{
+	"info": {
+		"_postman_id": "173762a0-9cf4-4fc1-8743-9832f9a9f31f",
+		"name": "Vikle",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:32003/auth?email=client@email.com&password=Client123",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "32003",
+							"path": [
+								"auth"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "client@email.com"
+								},
+								{
+									"key": "password",
+									"value": "Client123"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\"email@email.com\"",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:32003/auth",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "32003",
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "signup client",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test\",\n    \"surname\": \"ToTest\",\n    \"phone\": \"123456789\",\n    \"email\": \"thisisatest@email.com\",\n    \"password\": \"Password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:32003/auth",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "32003",
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "signup worker",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AZW1haWwuY29tIiwianRpIjoiMTE1ZGVhYTctNTQwNS00ZGI0LThlZTgtY2M4MTYyZDY3YmJiIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE3Mzg1ODc2Nzk1LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjYxOTU1IiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo0MjAwIn0.mHf4uBRhJcVFGTPvrvkbMp0W4uoo9ZtlXe--IDeQUTY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test\",\n    \"surname\": \"ToTest\",\n    \"phone\": \"123456789\",\n    \"email\": \"thisisatest@email.com\",\n    \"password\": \"Password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:32003/auth/worker?workshopId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "32003",
+							"path": [
+								"auth",
+								"worker"
+							],
+							"query": [
+								{
+									"key": "workshopId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "API",
+			"item": [
+				{
+					"name": "Vehicle",
+					"item": [
+						{
+							"name": "Get current reparation",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiY2xpZW50QGVtYWlsLmNvbSIsImp0aSI6IjI4ZmVlZjYyLTA4YzEtNGIxNC05ZWE0LTEzZTAwN2QxZjAwMiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkNsaWVudCIsImV4cCI6MTczODUzNjYxMjYsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjE5NTUiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.ItkRlZRU_qmgzDVvSmJcokbZe3gQE6m7SISr0arEFVI"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:32003/vehicle/owner?plateNumber=1234ABC",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "32003",
+									"path": [
+										"vehicle",
+										"owner"
+									],
+									"query": [
+										{
+											"key": "plateNumber",
+											"value": "1234ABC"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get owner",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiY2xpZW50QGVtYWlsLmNvbSIsImp0aSI6IjI4ZmVlZjYyLTA4YzEtNGIxNC05ZWE0LTEzZTAwN2QxZjAwMiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkNsaWVudCIsImV4cCI6MTczODUzNjYxMjYsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjE5NTUiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.ItkRlZRU_qmgzDVvSmJcokbZe3gQE6m7SISr0arEFVI",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:32003/vehicle/current?plateNumber=1234ABC",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "32003",
+									"path": [
+										"vehicle",
+										"current"
+									],
+									"query": [
+										{
+											"key": "plateNumber",
+											"value": "1234ABC"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get reparations history",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiY2xpZW50QGVtYWlsLmNvbSIsImp0aSI6IjI4ZmVlZjYyLTA4YzEtNGIxNC05ZWE0LTEzZTAwN2QxZjAwMiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkNsaWVudCIsImV4cCI6MTczODUzNjYxMjYsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjE5NTUiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.ItkRlZRU_qmgzDVvSmJcokbZe3gQE6m7SISr0arEFVI",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:32003/vehicle/reparations?plateNumber=1234ABC",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "32003",
+									"path": [
+										"vehicle",
+										"reparations"
+									],
+									"query": [
+										{
+											"key": "plateNumber",
+											"value": "1234ABC"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Get user by id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiY2xpZW50QGVtYWlsLmNvbSIsImp0aSI6IjI4ZmVlZjYyLTA4YzEtNGIxNC05ZWE0LTEzZTAwN2QxZjAwMiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkNsaWVudCIsImV4cCI6MTczODU4NzY3OTQsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjE5NTUiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.suhnxpKff0KlLcC8ZMBfsVmxHP1XrL40ohgQ7X7ERKc",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:32003/user?userId=28feef62-08c1-4b14-9ea4-13e007d1f002",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "32003",
+									"path": [
+										"user"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "28feef62-08c1-4b14-9ea4-13e007d1f002"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update user",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiVGVzdCIsImp0aSI6ImI3NzBiZDE1LWQxMzItNGZlZC05YTdhLTQ1ZmJlMWMwODgzYiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkNsaWVudCIsImV4cCI6MTczODUzODQ3OTIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjE5NTUiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.RVBDkl4iy3-8V2_hlhpnRb3dC8dDe7mEcKy2kOk9oIw",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"28feef62-08c1-4b14-9ea4-13e007d1f002\",\n    \"name\": \"Client\",\n    \"surname\": \"Test\",\n    \"phone\": \"123456789\",\n    \"email\": \"client@email.com\",\n    \"isWorker\": false,\n    \"idWorkshop\": null\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:32003/user",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "32003",
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get user vehicles",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiY2xpZW50QGVtYWlsLmNvbSIsImp0aSI6IjI4ZmVlZjYyLTA4YzEtNGIxNC05ZWE0LTEzZTAwN2QxZjAwMiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkNsaWVudCIsImV4cCI6MTczODUzNjYxMjYsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjE5NTUiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.ItkRlZRU_qmgzDVvSmJcokbZe3gQE6m7SISr0arEFVI",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:32003/user/vehicles?userId=28feef62-08c1-4b14-9ea4-13e007d1f002",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "32003",
+									"path": [
+										"user",
+										"vehicles"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "28feef62-08c1-4b14-9ea4-13e007d1f002"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update user vehicle",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiVGVzdCIsImp0aSI6ImI3NzBiZDE1LWQxMzItNGZlZC05YTdhLTQ1ZmJlMWMwODgzYiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkNsaWVudCIsImV4cCI6MTczODUzODQ3OTIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjE5NTUiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.RVBDkl4iy3-8V2_hlhpnRb3dC8dDe7mEcKy2kOk9oIw",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"572cef29-f1be-4f2e-b079-bea28b4636c0\",\n    \"plateNumber\": \"1234ABC\",\n    \"model\": \"A3\",\n    \"vehicleType\": 0,\n    \"year\": 2007,\n    \"lastTBDS\": 0,\n    \"lastITV\": 0,\n    \"idClient\": \"28feef62-08c1-4b14-9ea4-13e007d1f002\",\n    \"idDrivers\": []\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:32003/user/vehicles/1234ABC",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "32003",
+									"path": [
+										"user",
+										"vehicles",
+										"1234ABC"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete user vehicle",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer ",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:32003/user/vehicles?userId=28feef62-08c1-4b14-9ea4-13e007d1f002&plateNumber=1234ABC",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "32003",
+									"path": [
+										"user",
+										"vehicles"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "28feef62-08c1-4b14-9ea4-13e007d1f002"
+										},
+										{
+											"key": "plateNumber",
+											"value": "1234ABC"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get user dates",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiY2xpZW50QGVtYWlsLmNvbSIsImp0aSI6IjI4ZmVlZjYyLTA4YzEtNGIxNC05ZWE0LTEzZTAwN2QxZjAwMiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkNsaWVudCIsImV4cCI6MTczODUzNjYxMjYsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjE5NTUiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.ItkRlZRU_qmgzDVvSmJcokbZe3gQE6m7SISr0arEFVI"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:32003/user/dates?userId=28feef62-08c1-4b14-9ea4-13e007d1f002",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "32003",
+									"path": [
+										"user",
+										"dates"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "28feef62-08c1-4b14-9ea4-13e007d1f002"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New user date",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiY2xpZW50QGVtYWlsLmNvbSIsImp0aSI6IjI4ZmVlZjYyLTA4YzEtNGIxNC05ZWE0LTEzZTAwN2QxZjAwMiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkNsaWVudCIsImV4cCI6MTczODUzNjYxMjYsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjE5NTUiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.ItkRlZRU_qmgzDVvSmJcokbZe3gQE6m7SISr0arEFVI"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"fd3b181c-dd78-47ce-8154-fb1698b10773\",\n    \"workshopId\": \"1\",\n    \"reparationDate\": 637430191952452726,\n    \"reason\": 1,\n    \"plateNumber\": \"1234ABC\",\n    \"idClient\": \"28feef62-08c1-4b14-9ea4-13e007d1f002\",\n    \"status\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:32003/user/dates",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "32003",
+									"path": [
+										"user",
+										"dates"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Workshop",
+					"item": [
+						{
+							"name": "Get current reparations",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoid29ya2VyQGVtYWlsLmNvbSIsImp0aSI6IjBjMDkxMGU5LTBhYjItNGQ3MC05ZWEyLTIxMTk4ZGZiMzZhYyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IldvcmtlciIsImV4cCI6MTczODU4NzY3OTUsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjE5NTUiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.arwzBZrfr0GGIZx3rDlKkwx3oMkgvR9E_eO0YU7IlIA"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:32003/workshop/reparations?workshopId=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "32003",
+									"path": [
+										"workshop",
+										"reparations"
+									],
+									"query": [
+										{
+											"key": "workshopId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update reparation",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoid29ya2VyQGVtYWlsLmNvbSIsImp0aSI6IjBjMDkxMGU5LTBhYjItNGQ3MC05ZWEyLTIxMTk4ZGZiMzZhYyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IldvcmtlciIsImV4cCI6MTczODU4NzY3OTUsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjE5NTUiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.arwzBZrfr0GGIZx3rDlKkwx3oMkgvR9E_eO0YU7IlIA"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"e462fe80-63e3-4130-8128-eed38527dd2f\",\n    \"workshopId\": \"1\",\n    \"plateNumber\": \"1234ABC\",\n    \"date\": 637430191951109305,\n    \"type\": 1,\n    \"status\": 1,\n    \"oilFilter\": false,\n    \"airFilter\": false,\n    \"gasFilter\": false,\n    \"liquids\": false,\n    \"tbds\": false,\n    \"itv\": false,\n    \"details\": null\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:32003/workshop/reparations",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "32003",
+									"path": [
+										"workshop",
+										"reparations"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
