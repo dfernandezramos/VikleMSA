@@ -98,6 +98,7 @@ namespace LoginMS.Web.Controllers
         /// <summary>
         /// This method puts the provided user signup data in the login database.
         /// </summary>
+        /// <param name="workshopId">The workshop identifier</param>
         /// <param name="data">The signup data</param>
         [HttpPut]
         [Route("worker")]
@@ -105,14 +106,14 @@ namespace LoginMS.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> RegisterWorker([FromBody]SignupData data)
+        public async Task<IActionResult> RegisterWorker(string workshopId, [FromBody]SignupData data)
         {
             _log.Info("Calling signup worker endpoint...");
             
-            return await RegisterUser(data, UserRole.Worker);
+            return await RegisterUser(data, UserRole.Worker, workshopId);
         }
 
-        async Task<IActionResult> RegisterUser(SignupData data, string role)
+        async Task<IActionResult> RegisterUser(SignupData data, string role, string idWorkshop = null)
         {
             var authData = await _repository.GetAuthDataByEmail(data.Email.ToLower());
             if (authData != null)
@@ -122,7 +123,7 @@ namespace LoginMS.Web.Controllers
             }
 
             var userId = Guid.NewGuid().ToString();
-            var token = GenerateToken(data.Email.ToLower(), role.ToString(), userId);
+            var token = GenerateToken(data.Email.ToLower(), role, userId);
             
             await _repository.NewAuthData(new AuthData
             {
@@ -140,7 +141,9 @@ namespace LoginMS.Web.Controllers
                     Name = data.Name,
                     Surname = data.Surname,
                     Email = data.Email.ToLower(),
-                    Phone = data.Phone
+                    Phone = data.Phone,
+                    IsWorker = role == UserRole.Worker,
+                    IdWorkshop = idWorkshop
                 }
             };
             await _mbProducer.Send (userRegisteredEvent, "UserRegistration");
