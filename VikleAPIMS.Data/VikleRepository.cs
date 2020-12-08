@@ -229,7 +229,7 @@ namespace VikleAPIMS.Data
             }
             else
             {
-                await Vehicles.ReplaceOneAsync(c => c.PlateNumber == vehicle.PlateNumber, vehicle, new ReplaceOptions { IsUpsert = false }, cancellationToken);
+                await Vehicles.ReplaceOneAsync(c => c.PlateNumber == plateNumber, vehicle, new ReplaceOptions { IsUpsert = false }, cancellationToken);
             }
         }
         
